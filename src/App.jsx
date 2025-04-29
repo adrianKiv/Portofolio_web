@@ -16,7 +16,7 @@ function App() {
         </section>
 
         {/* Projects Section */}
-        <section id="projects" className="py-16 bg-white">
+        <section id="experiences" className="py-16 bg-white">
           <div className="container mx-auto text-center px-4">
             <h2 className="text-3xl font-semibold mb-8 text-indigo-400">
               Experiences

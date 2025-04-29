@@ -13,7 +13,7 @@ function Header() {
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="items-center justify-between h-16 bg-transparent flex relative">
             <div className="items-center flex">
-              <a href="#" className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2">
                 <img
                   alt="logo"
                   src="src/assets/images/logo.png"
@@ -22,7 +22,7 @@ function Header() {
                 <span className="text-sky-300 font-bold text-2xl tracking-wide">
                   Adrian
                 </span>
-              </a>
+              </div>
               <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block">
                 <div className="flex space-x-6">
                   {navLinks.map((link, index) => (
@@ -87,6 +87,19 @@ function Header() {
                 and software development. I also enjoy collaborating with others
                 to help improve my skills.
               </p>
+
+              <div className="mt-4">
+                <button class="relative inline-block p-px font-semibold leading-6 text-white bg-neutral-900 shadow-2xl cursor-pointer rounded-2xl shadow-emerald-900 transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 hover:shadow-emerald-600">
+                  <span class="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500 via-cyan-500 to-sky-600 p-[2px] opacity-0 transition-opacity duration-500 group-hover:opacity-100"></span>
+                  <span class="relative z-10 block px-6 py-3 rounded-2xl bg-neutral-950">
+                    <div class="relative z-10 flex items-center space-x-3">
+                      <span class="transition-all duration-500 group-hover:translate-x-1.5 group-hover:text-emerald-300">
+                        Download CV
+                      </span>
+                    </div>
+                  </span>
+                </button>
+              </div>
             </div>
             <div className="relative">
               <img
