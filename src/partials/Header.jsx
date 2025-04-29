@@ -1,3 +1,5 @@
+import GBRLOGO from "../assets/images/logo.png";
+
 function Header() {
   // Navigation links
   const navLinks = [
@@ -16,7 +18,7 @@ function Header() {
               <div className="flex items-center space-x-2">
                 <img
                   alt="logo"
-                  src="src/assets/images/logo.png"
+                  src={GBRLOGO}
                   className="invert h-14 w-auto"
                 />
                 <span className="text-sky-300 font-bold text-2xl tracking-wide">

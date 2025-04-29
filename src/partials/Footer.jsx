@@ -1,3 +1,5 @@
+import GBRLOGO from "../assets/images/logo.png";
+
 function Footer() {
     return (
       <div>
@@ -9,7 +11,7 @@ function Footer() {
                 className="flex items-center justify-center mb-5 text-2xl font-semibold text-gray-900 dark:text-white"
               >
                 <img
-                  src="src/assets/images/logo.png"
+                  src={GBRLOGO}
                   className="h-6 sm:h-9"
                   alt="yan Logo"
                 />
