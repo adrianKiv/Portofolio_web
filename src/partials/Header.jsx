@@ -74,9 +74,9 @@ function Header() {
             <div className="flex items-center space-x-4">
               <button
                 onClick={toggleDarkMode}
-                className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-yellow-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                className="p-2 rounded-full bg-gray-600 dark:bg-gray-500 text-gray-700 dark:text-yellow-400 hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
               >
-                {DarkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
+                {DarkMode ? <FiSun size={26} /> : <FiMoon size={26} />}
               </button>
 
               <div className="md:hidden">
@@ -116,12 +116,8 @@ function Header() {
                 Adrian Mulianto
               </span>
               <p className="mt-6 text-lg text-black dark:text-gray-300 max-w-lg">
-                I am a computer science student with a strong passion for
-                software development, data, and networking. I have actively
-                participated in programming and data competitions. I am highly
-                enthusiastic about expanding my knowledge in networking, data,
-                and software development. I also enjoy collaborating with others
-                to help improve my skills.
+              Undergraduate computer science student in Universitas Pendidikan Indonesia, software engineer specializing in Full-stack development.
+              I am currently as a Web development intern in Dinas Komunikasi dan Informatika Jawa Barat.
               </p>
 
               <div className="mt-4">
