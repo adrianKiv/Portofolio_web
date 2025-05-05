@@ -11,7 +11,9 @@ import GBRphyton from "./assets/images/logos_phyton.svg";
 import GBRpostgresql from "./assets/images/logos_postgresql.svg";
 import GBRreact from "./assets/images/logos_react.svg";
 import GBRtailwind from "./assets/images/logos_tailwindcss.svg";
+
 import Experience from './partials/Experience.jsx'
+import Project from "./partials/Project.jsx";
 
 const techs = [
   { name: "CSS", image: GBRcss },
@@ -154,34 +156,11 @@ function App() {
         <div className="border-t-4 border-gray-400 dark:border-gray-900 my-8 w-4/5 mx-auto" />
       </section>
 
+      {/* Experience Section */}
       <Experience />
-    
-      {/* Projects Section */}
-      <section id="projects" className="py-16 bg-white dark:bg-gray-700">
-        <div className="container mx-auto text-center px-4">
-          <h2 className="text-3xl font-semibold mb-8 text-indigo-400 dark:text-indigo-200">
-            Projects
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((item) => (
-              <div
-                key={item}
-                className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
-              >
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                  Proyek {item}
-                </h3>
-                <p className="mt-4 text-gray-600 dark:text-gray-300">
-                  Deskripsi singkat tentang proyek ini.
-                </p>
-                <button className="mt-4 bg-indigo-400 hover:bg-indigo-600 text-white px-4 py-2 rounded transition-colors">
-                  Lihat Proyek
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      
+      {/* Project Section */}
+      <Project />
 
       {/* Contact Section */}
       <section id="contact" className="py-16 bg-stone-100 dark:bg-gray-800">

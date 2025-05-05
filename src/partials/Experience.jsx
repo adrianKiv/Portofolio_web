@@ -4,22 +4,25 @@ export default function Experience() {
   const experiences = [
     {
       title: "1. Web Developer Intern",
+      subtitle: " @Diskominfo Jabar",
       detail:
-        "Bekerja sebagai intern pengembang web di PT XYZ, mengembangkan frontend menggunakan React dan backend menggunakan Laravel.",
+        "Bekerja sebagai intern pengembang web di Dinas Kumunikasi Dan Informatika, mengembangkan frontend dan backend menggunakan Laravel 11.",
     },
     {
       title: "2. Database System Practice Assistant",
+      subtitle: " @Universitas Pendidikan Indonesia",
       detail:
         "Membantu mahasiswa dalam praktik sistem basis data, memberikan pengarahan dan membimbing pengerjaan tugas menggunakan PostgreSQL.",
     },
     {
-      title:
-        "3. System Operation and Computer Networking practice Assistant",
+      title: "3. System Operation and Computer Networking practice Assistant",
+      subtitle: " @Universitas Pendidikan Indonesia",
       detail:
         "Mendampingi mahasiswa dalam praktik sistem operasi dan jaringan komputer, termasuk penggunaan Linux, konfigurasi jaringan, dan troubleshooting.",
     },
     {
       title: "4. Teaching Assistant for Assembler (Artificial Reality Platform)",
+      subtitle: " @Universitas Pendidikan Indonesia",
       detail:
         "Membantu dalam mata kuliah Assembler dengan praktik pengkodean dan debugging pada platform realitas buatan yang mensimulasikan hardware virtual.",
     },
@@ -55,9 +58,12 @@ export default function Experience() {
 
           {/* Detail (kanan) */}
           <div className="w-full md:w-2/3 bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md">
-            <h3 className="text-2xl font-bold text-gray-800 dark:text-white">
+            <h3 className="text-3xl font-bold text-gray-800 dark:text-white">
               {experiences[selectedIndex].title}
             </h3>
+            <h1 className="text-2xl font-bold text-indigo-300 dark:text-indigo-600">
+              {experiences[selectedIndex].subtitle}
+            </h1>
             <p className="mt-2 text-gray-600 dark:text-gray-300">
               {experiences[selectedIndex].detail}
             </p>

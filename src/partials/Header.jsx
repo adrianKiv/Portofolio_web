@@ -1,4 +1,5 @@
 import GBRLOGO from "../assets/images/logo.png";
+import CVyan from "../../public/CV_Adrian_Mulianto.pdf";
 import { useEffect, useState } from "react";
 import { FiSun, FiMoon } from "react-icons/fi";
 
@@ -58,7 +59,7 @@ function Header() {
                     <a
                       key={index}
                       href={link.href}
-                      className={`px-3 py-2 font-bold text-[16px] rounded-md transition-colors duration-300 ${
+                      className={`px-3 py-2 font-bold text-[18px] rounded-md transition-colors duration-300 ${
                         scrolled
                           ? "text-indigo-900 hover:text-indigo-600 dark:text-indigo-300 dark:hover:text-indigo-100"
                           : "text-indigo-800 hover:text-indigo-400 dark:text-gray-300 dark:hover:text-indigo-700"
@@ -121,22 +122,31 @@ function Header() {
               </p>
 
               <div className="mt-4">
-                <button className="relative inline-block p-px font-semibold leading-6 text-white bg-neutral-900 dark:bg-gray-800 rounded-2xl shadow-lg shadow-sky-500/30 dark:shadow-sky-400/20 transition-all duration-300 hover:scale-105 active:scale-95">
+                <a href={CVyan} className="relative inline-block p-px font-semibold leading-6 text-white bg-neutral-900 dark:bg-gray-800 rounded-2xl shadow-lg shadow-sky-500/30 dark:shadow-sky-400/20 transition-all duration-300 hover:scale-105 active:scale-95">
                   <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500 via-cyan-500 to-sky-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
                   <span className="relative z-10 flex items-center px-6 py-3 space-x-3 rounded-2xl bg-neutral-950 dark:bg-gray-900">
                     <span>Download CV</span>
                   </span>
-                </button>
+                </a>
               </div>
             </div>
 
             <div className="relative">
+              {/* Gambar untuk light mode */}
               <img
-                alt="table work"
-                src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                className="object-cover rounded-xl shadow-xl w-full dark:shadow-gray-800/50"
+                alt="table work light"
+                src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=2070&auto=format&fit=crop"
+                className="object-cover rounded-xl shadow-xl w-full dark:hidden"
+              />
+
+              {/* Gambar untuk dark mode */}
+              <img
+                alt="table work dark"
+                src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=2070&auto=format&fit=crop"
+                className="object-cover rounded-xl shadow-xl w-full hidden dark:block dark:shadow-gray-800/50"
               />
             </div>
+
           </div>
         </div>
       </div>
