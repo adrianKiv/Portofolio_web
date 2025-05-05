@@ -6,7 +6,6 @@ import GBRDBMS from "../assets/images/DBMS.png";
 import GBRHotel from "../assets/images/hoteljarkom.png";
 import GBRKeepreal from "../assets/images/keepreal.jpg";
 
-
 export default function Project() {
   const projects = [
       {
@@ -107,6 +106,9 @@ export default function Project() {
             </p>
             <p className="mt-3 text-gray-600 dark:text-gray-300">
               {projects[selectedIndex].detail}
+            </p>
+            <p className="text-indigo-400 dark:text-gray-800">
+                More detail on below...
             </p>
             <div className="flex gap-4 mt-4">
             {projects[selectedIndex].github && (

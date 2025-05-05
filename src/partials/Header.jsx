@@ -1,5 +1,5 @@
 import GBRLOGO from "../assets/images/logo.png";
-import CVyan from "../../public/CV_Adrian_Mulianto.pdf";
+import CVyan from "/CV_Adrian_Mulianto.pdf";
 import { useEffect, useState } from "react";
 import { FiSun, FiMoon } from "react-icons/fi";
 
@@ -122,12 +122,9 @@ function Header() {
               </p>
 
               <div className="mt-4">
-                <a href={CVyan} className="relative inline-block p-px font-semibold leading-6 text-white bg-neutral-900 dark:bg-gray-800 rounded-2xl shadow-lg shadow-sky-500/30 dark:shadow-sky-400/20 transition-all duration-300 hover:scale-105 active:scale-95">
-                  <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500 via-cyan-500 to-sky-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
-                  <span className="relative z-10 flex items-center px-6 py-3 space-x-3 rounded-2xl bg-neutral-950 dark:bg-gray-900">
-                    <span>Download CV</span>
-                  </span>
-                </a>
+              <a href={CVyan} class="cursor-pointer uppercase bg-white dark:bg-gray-500 px-4 py-2 active:translate-x-0.5 active:translate-y-0.5 hover:shadow-[0.5rem_0.5rem_#F44336,-0.5rem_-0.5rem_#00BCD4] transition">
+                Download CV!
+              </a>
               </div>
             </div>
 
