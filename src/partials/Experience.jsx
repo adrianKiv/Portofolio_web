@@ -5,26 +5,23 @@ export default function Experience() {
     {
       title: "1. Web Developer Intern",
       subtitle: " @Diskominfo Jabar",
-      detail:
-        "Bekerja sebagai intern pengembang web di Dinas Kumunikasi Dan Informatika, mengembangkan frontend dan backend menggunakan Laravel 11.",
+      detail: "I worked as an intern at the Department of Communication and Informatics, where my primary responsibility was developing web applications using the Laravel 11 framework for both frontend and backend components. During my internship, I contributed to several internal projects, including the development of a digital library system for the Pojok Baca program. This system was designed to streamline the management of book collections as well as the borrowing and return processes for the public. In addition, I was involved in the improvement and optimization of the archiving module, focusing on enhancing the efficiency of document management and refining features such as search functionality and reporting. This experience gave me hands-on insight into information system development within a government environment and demonstrated how technology can be effectively utilized to support better and more transparent public services.",
     },
     {
       title: "2. Database System Practice Assistant",
       subtitle: " @Universitas Pendidikan Indonesia",
-      detail:
-        "Membantu mahasiswa dalam praktik sistem basis data, memberikan pengarahan dan membimbing pengerjaan tugas menggunakan PostgreSQL.",
+      detail: "I also have experience assisting students in Database Systems lab sessions, where I provided guidance, supervision, and technical support throughout the learning process. This included explaining fundamental concepts of relational databases as well as hands-on implementation involving the design and management of databases using MySQL as the database management system (DBMS). These databases were operated through XAMPP, an open-source software package that provides a complete local server environment—including Apache, MySQL, PHP, and Perl—which is highly useful for offline learning and testing of web-based applications. In practice, I helped students understand how to design database schemas, write SQL queries, and integrate databases with PHP-based application interfaces.",
     },
     {
       title: "3. System Operation and Computer Networking practice Assistant",
       subtitle: " @Universitas Pendidikan Indonesia",
-      detail:
-        "Mendampingi mahasiswa dalam praktik sistem operasi dan jaringan komputer, termasuk penggunaan Linux, konfigurasi jaringan, dan troubleshooting.",
+      detail: "In addition, I served as a teaching assistant in Operating Systems and Computer Networks lab sessions, helping students understand both theoretical and practical aspects of Linux-based operating systems, specifically Ubuntu. I guided students through various technical activities such as command-line navigation, file and user management, package installation, and configuring permissions and services in Linux. I also assisted students in network configuration tasks, both conceptually and through simulations using Cisco Packet Tracer. This included helping them build network topologies, configure devices such as switches, routers, and access points, and simulate data transmission between hosts. I provided troubleshooting support for common networking issues, including static/dynamic IP configuration, connectivity problems, and data path analysis.",
     },
     {
       title: "4. Teaching Assistant for Assembler (Artificial Reality Platform)",
       subtitle: " @Universitas Pendidikan Indonesia",
       detail:
-        "Membantu dalam mata kuliah Assembler dengan praktik pengkodean dan debugging pada platform realitas buatan yang mensimulasikan hardware virtual.",
+        "I also contributed to the Assembler programming course by assisting students during coding and debugging sessions. These activities were conducted on a virtual reality-based platform that simulates virtual hardware, allowing students to better visualize how machine-level instructions interact with memory and processor components. I emphasized how using the right tools can significantly simplify complex low-level programming tasks and enhance the learning experience.",
     },
   ];
 

@@ -19,22 +19,24 @@ import GBRflutter from "./assets/images/flutter.svg";
 import GBRmongodb from "./assets/images/mongodb.svg";
 import GBRselenium from "./assets/images/selenium.svg";
 import GBRsqlite from "./assets/images/sqlite.svg";
+import GBRvite from "/vite.svg";
 
 import Experience from "./partials/Experience.jsx";
 import Project from "./partials/Project.jsx";
 
 const techs = [
-  { name: "CSS", image: GBRcss },
   { name: "HTML", image: GBRhtml },
+  { name: "CSS", image: GBRcss },
   { name: "JavaScript", image: GBRjs },
   { name: "TailWindcss", image: GBRtailwind },
   { name: "NodeJS", image: GBRnodejs },
   { name: "React", image: GBRreact },
+  { name: "Vite", image: GBRvite },
   { name: "Git", image: GBRgit },
   { name: "Laravel", image: GBRlaravel },
   { name: "PHP", image: GBRphp },
   { name: "Phyton", image: GBRphyton },
-  { name: "Cpp", image: GBRcpp },
+  { name: "C++", image: GBRcpp },
   { name: "C", image: GBRc },
   { name: "Dart", image: GBRdart },
   { name: "Flutter", image: GBRflutter },
@@ -127,11 +129,11 @@ function App() {
             className="text-black hover:text-blue-700 dark:hover:text-blue-900 relative z-10 flex items-center justify-center w-full h-full"
             target="_blank"
           >
-            <svg 
-            className="w-5.5 h-5.5" 
-            fill="currentColor" 
-            viewBox="0 0 16 16"
-            aria-hidden="true"
+            <svg
+              className="w-5.5 h-5.5"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+              aria-hidden="true"
             >
               <path
                 fillRule="evenodd"
@@ -182,13 +184,16 @@ function App() {
             {techs.map((item, i) => (
               <div
                 key={i}
-                className="bg-gray-100 dark:bg-gray-500 p-2 w-16 h-16 rounded-xl shadow-xl flex items-center justify-center"
+                className="relative group bg-gray-100 dark:bg-gray-500 p-2 w-16 h-16 rounded-xl shadow-xl flex items-center justify-center"
               >
                 <img
                   src={item.image}
                   alt={item.name}
                   className="w-10 h-10 object-contain"
                 />
+                <span className="absolute bottom-full mb-2 px-2 py-1 text-xs text-white bg-black dark:bg-gray-800 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  {item.name}
+                </span>
               </div>
             ))}
           </div>
