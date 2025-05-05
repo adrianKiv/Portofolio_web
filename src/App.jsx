@@ -49,10 +49,10 @@ const techs = [
 function App() {
   return (
     <div className="bg-white dark:bg-gray-900 dark:text-white">
-      <div className="fixed top-1/2 left-0 z-50 transform -translate-y-1/2 flex flex-col space-y-4 pl-2">
+      <div className="fixed top-1/2 right-2 z-50 transform -translate-y-1/2 flex flex-col space-y-4 pl-2">
         {/* Facebook */}
         <div className="relative w-10 h-10 group">
-          <div className="absolute left-0 top-0 w-full h-full bg-blue-400 dark:bg-gray-700 rounded-full shadow transition-all duration-300 group-hover:left-8 group-hover:bg-blue-600 dark:group-hover:bg-blue-950"></div>
+          <div className="absolute left-0 top-0 w-full h-full bg-blue-400 dark:bg-gray-700 rounded-full shadow transition-all duration-300 group-hover:-left-7 group-hover:bg-blue-600 dark:group-hover:bg-blue-950"></div>
           <a
             href="https://www.facebook.com/adrian.mulianto/"
             className="text-black hover:text-blue-600 dark:hover:text-blue-900 relative z-10 flex items-center justify-center w-full h-full"
@@ -75,7 +75,7 @@ function App() {
 
         {/* Instagram */}
         <div className="relative w-10 h-10 group">
-          <div className="absolute left-0 top-0 w-full h-full bg-pink-400 dark:bg-gray-700 rounded-full shadow transition-all duration-300 group-hover:left-8 group-hover:bg-pink-600 dark:group-hover:bg-pink-950"></div>
+          <div className="absolute left-0 top-0 w-full h-full bg-pink-400 dark:bg-gray-700 rounded-full shadow transition-all duration-300 group-hover:-left-7 group-hover:bg-pink-600 dark:group-hover:bg-pink-950"></div>
           <a
             href="https://www.instagram.com/adriannn_027/"
             className="text-black hover:text-pink-500 dark:hover:text-pink-900 relative z-10 flex items-center justify-center w-full h-full"
@@ -98,7 +98,7 @@ function App() {
 
         {/* GitHub */}
         <div className="relative w-10 h-10 group">
-          <div className="absolute left-0 top-0 w-full h-full bg-gray-400 dark:bg-gray-700 rounded-full shadow transition-all duration-300 group-hover:left-8 group-hover:bg-gray-600 dark:group-hover:bg-gray-950"></div>
+          <div className="absolute left-0 top-0 w-full h-full bg-gray-400 dark:bg-gray-700 rounded-full shadow transition-all duration-300 group-hover:-left-7 group-hover:bg-gray-600 dark:group-hover:bg-gray-950"></div>
           <a
             href="https://github.com/adrianKiv"
             className="text-black hover:text-black dark:hover:text-white relative z-10 flex items-center justify-center w-full h-full"
@@ -121,7 +121,7 @@ function App() {
 
         {/* LinkedIn */}
         <div className="relative w-10 h-10 group">
-          <div className="absolute left-0 top-0 w-full h-full bg-blue-400 dark:bg-gray-700 rounded-full shadow transition-all duration-300 group-hover:left-8 group-hover:bg-blue-600 dark:group-hover:bg-blue-950"></div>
+          <div className="absolute left-0 top-0 w-full h-full bg-blue-400 dark:bg-gray-700 rounded-full shadow transition-all duration-300 group-hover:-left-7 group-hover:bg-blue-600 dark:group-hover:bg-blue-950"></div>
           <a
             href="https://www.linkedin.com/in/adrianmulianto/"
             className="text-black hover:text-blue-700 dark:hover:text-blue-900 relative z-10 flex items-center justify-center w-full h-full"
