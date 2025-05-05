@@ -11,6 +11,7 @@ import GBRphyton from "./assets/images/logos_phyton.svg";
 import GBRpostgresql from "./assets/images/logos_postgresql.svg";
 import GBRreact from "./assets/images/logos_react.svg";
 import GBRtailwind from "./assets/images/logos_tailwindcss.svg";
+import Experience from './partials/Experience.jsx'
 
 const techs = [
   { name: "CSS", image: GBRcss },
@@ -153,48 +154,8 @@ function App() {
         <div className="border-t-4 border-gray-400 dark:border-gray-900 my-8 w-4/5 mx-auto" />
       </section>
 
-{/* Experiences Section */}
-<section id="experiences" className="py-16 bg-stone-100 dark:bg-gray-800">
-  <div className="container mx-auto px-4">
-    <h2 className="text-3xl font-semibold mb-8 text-center text-indigo-400 dark:text-indigo-200">
-      Experiences
-    </h2>
-
-    <div className="flex flex-col md:flex-row gap-8">
-      {/* List (kiri) */}
-      <div className="w-full md:w-1/3 space-y-4">
-        {[1, 2, 3].map((item) => (
-          <button
-            key={item}
-            className="w-full text-left p-4 bg-white dark:bg-gray-700 rounded-lg shadow hover:bg-indigo-200 dark:hover:bg-indigo-600 transition-colors"
-            // tambahkan fungsi onClick jika ingin interaktif
-          >
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
-              Experience {item}
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              Ringkasan singkat...
-            </p>
-          </button>
-        ))}
-      </div>
-
-      {/* Detail (kanan) */}
-      <div className="w-full md:w-2/3 bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md">
-        <h3 className="text-2xl font-bold text-gray-800 dark:text-white">
-          Judul Experience
-        </h3>
-        <p className="mt-2 text-gray-600 dark:text-gray-300">
-          Ini adalah penjelasan lebih detail mengenai experience yang dipilih.
-          Kamu bisa menghubungkannya dengan state React agar konten berubah
-          saat list di sebelah kiri diklik. 111
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
+      <Experience />
+    
       {/* Projects Section */}
       <section id="projects" className="py-16 bg-white dark:bg-gray-700">
         <div className="container mx-auto text-center px-4">

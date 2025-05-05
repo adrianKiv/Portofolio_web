@@ -74,7 +74,7 @@ function Header() {
             <div className="flex items-center space-x-4">
               <button
                 onClick={toggleDarkMode}
-                className="p-2 rounded-full bg-gray-600 dark:bg-gray-500 text-gray-700 dark:text-yellow-400 hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
+                className="p-2 rounded-full bg-gray-500 dark:bg-gray-500 text-gray-950 dark:text-yellow-400 hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors"
               >
                 {DarkMode ? <FiSun size={26} /> : <FiMoon size={26} />}
               </button>
