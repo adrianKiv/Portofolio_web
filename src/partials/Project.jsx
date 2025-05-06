@@ -108,7 +108,7 @@ export default function Project() {
               {projects[selectedIndex].detail}
             </p>
             <p className="text-indigo-400 dark:text-gray-800">
-                More detail on below...
+                More detail about the project on below.
             </p>
             <div className="flex gap-4 mt-4">
             {projects[selectedIndex].github && (

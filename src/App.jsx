@@ -23,6 +23,7 @@ import GBRvite from "/vite.svg";
 
 import Experience from "./partials/Experience.jsx";
 import Project from "./partials/Project.jsx";
+import Contact from "./partials/Contact.jsx";
 
 const techs = [
   { name: "HTML", image: GBRhtml },
@@ -208,69 +209,8 @@ function App() {
       <Project />
 
       {/* Contact Section */}
-      <section id="contact" className="py-16 bg-stone-100 dark:bg-gray-800">
-        <div className="container mx-auto text-center px-4 max-w-xl">
-          <h2 className="text-3xl font-semibold mb-4 text-indigo-400 dark:text-indigo-200">
-            Contact
-          </h2>
-          <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
-            Ingin bekerja bersama saya? Kirimkan pesan melalui formulir di bawah
-            ini.
-          </p>
 
-          <form
-            action="mailto:adrianmulianto@gmail.com"
-            method="POST"
-            encType="text/plain"
-            className="space-y-4 text-left"
-          >
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Nama
-              </label>
-              <input
-                type="text"
-                name="name"
-                required
-                className="mt-1 block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-md shadow-sm px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                required
-                className="mt-1 block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-md shadow-sm px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Pesan
-              </label>
-              <textarea
-                name="message"
-                rows="4"
-                required
-                className="mt-1 block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-md shadow-sm px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500"
-              ></textarea>
-            </div>
-
-            <div className="text-center">
-              <button
-                type="submit"
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-full transition-colors"
-              >
-                Kirim Pesan
-              </button>
-            </div>
-          </form>
-        </div>
-      </section>
+      <Contact />
     </div>
   );
 }
