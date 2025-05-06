@@ -3,6 +3,16 @@ import CVyan from "/CV_Adrian_Mulianto.pdf";
 import { useEffect, useState } from "react";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import GBRmedihome from "../assets/images/medifastBeranda.png";
+import GBRUpdown from "../assets/images/Updown.png";
+import GBRHydroculus from "../assets/images/hydroculus.png";
+import GBRDBMS from "../assets/images/DBMS.png";
+import GBRHotel from "../assets/images/hoteljarkom.png";
+import GBRKeepreal from "../assets/images/keepreal.jpg";
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -141,19 +151,41 @@ function Header() {
               </div>
             </div>
 
-            {/* Gambar */}
-            <div className="relative">
-              <img
-                alt="table work light"
-                src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=2070&auto=format&fit=crop"
-                className="object-cover rounded-xl shadow-xl w-full dark:hidden"
-              />
-              <img
-                alt="table work dark"
-                src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=2070&auto=format&fit=crop"
-                className="object-cover rounded-xl shadow-xl w-full hidden dark:block dark:shadow-gray-800/50"
-              />
-            </div>
+{/* Gambar */}
+<div className="relative rounded-xl overflow-hidden shadow-xl">
+  <Swiper
+    modules={[Autoplay, Pagination]}
+    autoplay={{ delay: 4000, disableOnInteraction: false }}
+    pagination={{ clickable: true }}
+    loop={true}
+    className="w-full aspect-[16/9] sm:aspect-[16/7] md:aspect-[16/5]"
+  >
+    {[
+      { image: GBRUpdown, title: "UpDown Game" },
+      { image: GBRHydroculus, title: "Hydroculus" },
+      { image: GBRDBMS, title: "DBMS" },
+      { image: GBRmedihome, title: "Medifast App" },
+      { image: GBRHotel, title: "Hotel Network & IOT" },
+      { image: GBRKeepreal, title: "KeepReal" },
+    ].map((item, index) => (
+      <SwiperSlide key={index}>
+        <div className="relative w-full h-full">
+          <img
+            src={item.image}
+            alt={item.title}
+            className="object-cover w-full h-full"
+          />
+          <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+            <h2 className="text-white text-base sm:text-lg md:text-2xl font-bold bg-black/50 px-3 py-1 rounded">
+              {item.title}
+            </h2>
+          </div>
+        </div>
+      </SwiperSlide>
+    ))}
+  </Swiper>
+</div>
+
           </div>
         </div>
       </div>

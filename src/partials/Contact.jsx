@@ -23,11 +23,11 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-16 bg-stone-100 dark:bg-gray-800">
-      <div className="container mx-auto text-center px-4 max-w-xl">
-        <h2 className="text-3xl font-semibold mb-4 text-indigo-400 dark:text-indigo-200">
-          Contact
-        </h2>
+    <section id="contact" className="py-16 bg-white dark:bg-gray-700">
+      <h2 className="text-3xl font-semibold mb-9 text-indigo-400 dark:text-indigo-200 text-center">
+        Contact
+      </h2>
+      <div className="container mx-auto text-center px-4 max-w-xl dark:bg-gray-600 rounded-2xl p-2 bg-sky-100 shadow">
         <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
           Interested in working with me? Send a message using the form below.
         </p>

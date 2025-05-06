@@ -19,4 +19,8 @@ html {
   --font-eduVIC: eduVIC, "sans-serif"; 
 }
 
+.swiper-pagination {
+  display: none !important;
+}
+
 @custom-variant dark (&:where(.dark, .dark *))
