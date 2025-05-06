@@ -52,7 +52,7 @@ const techs = [
 function App() {
   return (
     <div className="bg-white dark:bg-gray-900 dark:text-white">
-      <div className="fixed top-1/2 right-2 z-50 transform -translate-y-1/2 flex flex-col space-y-4 pl-2">
+      <div className="fixed -bottom-1/12 right-2 z-50 transform -translate-y-1/2 flex flex-col space-y-2 pl-2">
         {/* Facebook */}
         <div className="relative w-10 h-10 group">
           <div className="absolute left-0 top-0 w-full h-full bg-blue-400 dark:bg-gray-700 rounded-full shadow transition-all duration-300 group-hover:-left-7 group-hover:bg-blue-600 dark:group-hover:bg-blue-950"></div>
@@ -141,6 +141,26 @@ function App() {
                 clipRule="evenodd"
                 d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"
               />
+            </svg>
+          </a>
+        </div>
+
+        {/* YouTube */}
+        <div className="relative w-10 h-10 group">
+          <div className="absolute left-0 top-0 w-full h-full bg-red-500 dark:bg-gray-700 rounded-full shadow transition-all duration-300 group-hover:-left-7 group-hover:bg-red-700 dark:group-hover:bg-red-900"></div>
+          <a
+            href="https://www.youtube.com/@adrian_2791" // Ganti dengan URL channel YouTube Anda
+            className="text-black hover:text-red-700 dark:hover:text-red-400 relative z-10 flex items-center justify-center w-full h-full"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg
+              className="w-5.5 h-5.5"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M23.498 6.186a2.946 2.946 0 0 0-2.072-2.083C19.692 3.5 12 3.5 12 3.5s-7.692 0-9.426.603a2.946 2.946 0 0 0-2.072 2.083C0 8.012 0 12 0 12s0 3.988.502 5.814a2.946 2.946 0 0 0 2.072 2.083C4.308 20.5 12 20.5 12 20.5s7.692 0 9.426-.603a2.946 2.946 0 0 0 2.072-2.083C24 15.988 24 12 24 12s0-3.988-.502-5.814zM9.75 15.568V8.432L15.818 12 9.75 15.568z"/>
             </svg>
           </a>
         </div>

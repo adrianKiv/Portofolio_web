@@ -2,10 +2,12 @@ import GBRLOGO from "../assets/images/logo.png";
 import CVyan from "/CV_Adrian_Mulianto.pdf";
 import { useEffect, useState } from "react";
 import { FiSun, FiMoon } from "react-icons/fi";
+import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [DarkMode, setDarkMode] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (DarkMode) {
@@ -19,9 +21,8 @@ function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [DarkMode]);
 
-  const toggleDarkMode = () => {
-    setDarkMode(!DarkMode);
-  };
+  const toggleDarkMode = () => setDarkMode(!DarkMode);
+  const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
   const navLinks = [
     { text: "About", href: "#about" },
@@ -31,7 +32,7 @@ function Header() {
   ];
 
   return (
-    <div className="bg-white min-h-[80vh] relative overflow-hidden bg-[url('https://images.unsplash.com/photo-1638202201577-63a92d444e4d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-no-repeat bg-cover dark:bg-[url('https://images.unsplash.com/photo-1484387436194-cf7cb70800ce?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')]">
+    <div className="bg-white min-h-[80vh] relative overflow-hidden bg-[url('https://images.unsplash.com/photo-1638202201577-63a92d444e4d?q=80&w=2070&auto=format&fit=crop')] bg-no-repeat bg-cover dark:bg-[url('https://images.unsplash.com/photo-1484387436194-cf7cb70800ce?q=80&w=2070&auto=format&fit=crop')]">
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           scrolled
@@ -40,38 +41,36 @@ function Header() {
         }`}
       >
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="items-center justify-between h-16 flex relative">
-            <div className="items-center flex">
-              <a href="#" className="flex items-center space-x-2">
-                <img
-                  alt="logo"
-                  src={GBRLOGO}
-                  className="h-14 w-auto dark:invert"
-                />
-                <span className="font-pressstart text-2xl tracking-wide text-sky-600 dark:text-sky-300">
-                  ADRIAN
-                </span>
-              </a>
+          <div className="flex items-center justify-between h-16 relative">
+            <a href="#" className="flex items-center space-x-2">
+              <img
+                src={GBRLOGO}
+                alt="logo"
+                className="h-14 w-auto dark:invert"
+              />
+              <span className="font-pressstart text-2xl tracking-wide text-sky-600 dark:text-sky-300">
+                ADRIAN
+              </span>
+            </a>
 
-              <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block text-black">
-                <div className="flex space-x-6 text-black">
-                  {navLinks.map((link, index) => (
-                    <a
-                      key={index}
-                      href={link.href}
-                      className={`px-3 py-2 font-bold text-[18px] rounded-md transition-colors duration-300 ${
-                        scrolled
-                          ? "text-indigo-900 hover:text-indigo-600 dark:text-indigo-300 dark:hover:text-indigo-100"
-                          : "text-indigo-800 hover:text-indigo-400 dark:text-gray-300 dark:hover:text-indigo-700"
-                      }`}
-                    >
-                      {link.text}
-                    </a>
-                  ))}
-                </div>
-              </div>
+            {/* Desktop Nav */}
+            <div className="hidden lg:flex space-x-6 absolute left-1/2 transform -translate-x-1/2">
+              {navLinks.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.href}
+                  className={`px-3 py-2 font-bold text-[18px] rounded-md transition-colors duration-300 ${
+                    scrolled
+                      ? "text-indigo-900 hover:text-indigo-600 dark:text-indigo-300 dark:hover:text-indigo-100"
+                      : "text-indigo-800 hover:text-indigo-400 dark:text-gray-300 dark:hover:text-indigo-700"
+                  }`}
+                >
+                  {link.text}
+                </a>
+              ))}
             </div>
 
+            {/* Right Controls */}
             <div className="flex items-center space-x-4">
               <button
                 onClick={toggleDarkMode}
@@ -80,32 +79,41 @@ function Header() {
                 {DarkMode ? <FiSun size={26} /> : <FiMoon size={26} />}
               </button>
 
-              <div className="md:hidden">
+              {/* Hamburger for Mobile */}
+              <div className="lg:hidden">
                 <button
-                  type="button"
-                  className="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                  onClick={toggleMobileMenu}
+                  className="p-2 text-gray-700 dark:text-gray-300"
                 >
-                  <svg
-                    className="w-6 h-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  </svg>
+                  {mobileMenuOpen ? (
+                    <HiOutlineX size={28} />
+                  ) : (
+                    <HiOutlineMenuAlt3 size={28} />
+                  )}
                 </button>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden px-4 pb-4 bg-white dark:bg-gray-900 space-y-2">
+            {navLinks.map((link, index) => (
+              <a
+                key={index}
+                href={link.href}
+                className="block px-3 py-2 rounded-md text-base font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {link.text}
+              </a>
+            ))}
+          </div>
+        )}
       </nav>
 
+      {/* Hero Content */}
       <div className="pt-32 pb-16 sm:pt-32 lg:pb-10 sm:pb-12 relative z-0">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <div className="lg:grid lg:grid-cols-2 lg:gap-12 items-center">
@@ -117,33 +125,35 @@ function Header() {
                 Adrian Mulianto
               </span>
               <p className="mt-6 text-lg text-black dark:text-gray-300 max-w-lg">
-              Undergraduate computer science student in Universitas Pendidikan Indonesia, software engineer specializing in Full-stack development.
-              I am currently as a Web development intern in Dinas Komunikasi dan Informatika Jawa Barat.
+                Undergraduate computer science student in Universitas Pendidikan
+                Indonesia, software engineer specializing in Full-stack
+                development. I am currently as a Web development intern in Dinas
+                Komunikasi dan Informatika Jawa Barat.
               </p>
-
               <div className="mt-4">
-              <a href={CVyan} target="_blank" class="cursor-pointer uppercase bg-white dark:bg-gray-500 px-4 py-2 active:translate-x-0.5 active:translate-y-0.5 hover:shadow-[0.5rem_0.5rem_#F44336,-0.5rem_-0.5rem_#00BCD4] transition">
-                Download CV!
-              </a>
+                <a
+                  href={CVyan}
+                  target="_blank"
+                  className="cursor-pointer uppercase bg-white dark:bg-gray-500 px-4 py-2 active:translate-x-0.5 active:translate-y-0.5 hover:shadow-[0.5rem_0.5rem_#F44336,-0.5rem_-0.5rem_#00BCD4] transition"
+                >
+                  Download CV!
+                </a>
               </div>
             </div>
 
+            {/* Gambar */}
             <div className="relative">
-              {/* Gambar untuk light mode */}
               <img
                 alt="table work light"
                 src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=2070&auto=format&fit=crop"
                 className="object-cover rounded-xl shadow-xl w-full dark:hidden"
               />
-
-              {/* Gambar untuk dark mode */}
               <img
                 alt="table work dark"
                 src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=2070&auto=format&fit=crop"
                 className="object-cover rounded-xl shadow-xl w-full hidden dark:block dark:shadow-gray-800/50"
               />
             </div>
-
           </div>
         </div>
       </div>
