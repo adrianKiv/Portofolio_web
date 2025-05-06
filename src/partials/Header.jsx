@@ -151,41 +151,40 @@ function Header() {
               </div>
             </div>
 
-{/* Gambar */}
-<div className="relative rounded-xl overflow-hidden shadow-xl">
-  <Swiper
-    modules={[Autoplay, Pagination]}
-    autoplay={{ delay: 4000, disableOnInteraction: false }}
-    pagination={{ clickable: true }}
-    loop={true}
-    className="w-full aspect-[16/9] sm:aspect-[16/7] md:aspect-[16/5]"
-  >
-    {[
-      { image: GBRUpdown, title: "UpDown Game" },
-      { image: GBRHydroculus, title: "Hydroculus" },
-      { image: GBRDBMS, title: "DBMS" },
-      { image: GBRmedihome, title: "Medifast App" },
-      { image: GBRHotel, title: "Hotel Network & IOT" },
-      { image: GBRKeepreal, title: "KeepReal" },
-    ].map((item, index) => (
-      <SwiperSlide key={index}>
-        <div className="relative w-full h-full">
-          <img
-            src={item.image}
-            alt={item.title}
-            className="object-cover w-full h-full"
-          />
-          <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-            <h2 className="text-white text-base sm:text-lg md:text-2xl font-bold bg-black/50 px-3 py-1 rounded">
-              {item.title}
-            </h2>
-          </div>
-        </div>
-      </SwiperSlide>
-    ))}
-  </Swiper>
-</div>
-
+            {/* Gambar */}
+            <div className="relative rounded-xl overflow-hidden shadow-xl">
+              <Swiper
+                modules={[Autoplay, Pagination]}
+                autoplay={{ delay: 3300, disableOnInteraction: false }}
+                pagination={{ clickable: true }}
+                loop={true}
+                className="w-full aspect-[2/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[2/1]"
+              >
+                {[
+                  { image: GBRUpdown, title: "UpDown Game" },
+                  { image: GBRHydroculus, title: "Hydroculus" },
+                  { image: GBRDBMS, title: "DBMS" },
+                  { image: GBRmedihome, title: "Medifast App" },
+                  { image: GBRHotel, title: "Hotel Network & IOT" },
+                  { image: GBRKeepreal, title: "KeepReal" },
+                ].map((item, index) => (
+                  <SwiperSlide key={index}>
+                    <div className="relative w-full h-full">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="object-cover w-full h-full"
+                      />
+                      <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                        <h2 className="text-white text-sm sm:text-lg md:text-2xl lg:text-3xl font-bold bg-black/50 px-4 py-2 rounded">
+                          {item.title}
+                        </h2>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
           </div>
         </div>
       </div>
