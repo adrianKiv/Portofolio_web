@@ -75,7 +75,7 @@ export default function Project() {
   return (
     <section id="projects" className="py-16 bg-white dark:bg-gray-700">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-semibold mb-8 text-center text-indigo-400 dark:text-indigo-200">
+        <h2 className="text-3xl font-semibold mb-8 text-center text-blue-400 dark:text-blue-200">
           Projects
         </h2>
 
@@ -91,7 +91,13 @@ export default function Project() {
                   onClick={() =>
                     setSelectedIndex(selectedIndex === index ? -1 : index)
                   }
-                  className="w-full flex justify-between items-center px-4 py-3 bg-indigo-100 dark:bg-indigo-700 dark:text-white font-semibold"
+                  className={`w-full flex justify-between items-center px-4 py-3 font-semibold transition-colors
+                    ${
+                      selectedIndex === index
+                        ? "bg-blue-200 dark:bg-blue-700 text-blue-600 dark:text-white"
+                        : "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-white"
+                    }
+                  `}
                 >
                   {project.title}
                   <span
@@ -104,7 +110,7 @@ export default function Project() {
                       width="16"
                       height="16"
                       fill="currentColor"
-                      class="bi bi-caret-down"
+                      className="bi bi-caret-down"
                       viewBox="0 0 16 16"
                     >
                       <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659" />
@@ -168,8 +174,8 @@ export default function Project() {
                   onClick={() => setSelectedIndex(index)}
                   className={`w-full text-left p-4 rounded-lg shadow transition-colors ${
                     selectedIndex === index
-                      ? "bg-indigo-200 dark:bg-indigo-600 text-indigo-900 dark:text-white"
-                      : "bg-white dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-indigo-100 dark:hover:bg-indigo-500"
+                      ? "bg-blue-200 dark:bg-blue-600 text-blue-900 dark:text-white"
+                      : "bg-white dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-blue-100 dark:hover:bg-blue-500"
                   }`}
                 >
                   <h3 className="text-lg font-semibold">{project.title}</h3>
@@ -189,13 +195,13 @@ export default function Project() {
                   <h3 className="text-2xl font-bold text-gray-800 dark:text-white">
                     {projects[selectedIndex].title}
                   </h3>
-                  <p className="text-indigo-500 dark:text-indigo-300 font-semibold">
+                  <p className="text-blue-500 dark:text-blue-300 font-semibold">
                     {projects[selectedIndex].subtitle}
                   </p>
                   <p className="mt-3 text-gray-600 dark:text-gray-300">
                     {projects[selectedIndex].detail}
                   </p>
-                  <p className="text-indigo-400 dark:text-gray-800">
+                  <p className="text-blue-400 dark:text-gray-800">
                     More detail about the project on below.
                   </p>
                   <div className="flex gap-4 mt-4">

@@ -155,7 +155,7 @@ function Header() {
             <div className="relative rounded-xl overflow-hidden shadow-xl">
               <Swiper
                 modules={[Autoplay, Pagination]}
-                autoplay={{ delay: 3300, disableOnInteraction: false }}
+                autoplay={{ delay: 2800, disableOnInteraction: false }}
                 pagination={{ clickable: true }}
                 loop={true}
                 className="w-full aspect-[2/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[2/1]"
