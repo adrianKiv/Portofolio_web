@@ -1,5 +1,5 @@
 import GBRLOGO from "../assets/images/logo.png";
-import CVyan from "/CV_Adrian_Mulianto.pdf";
+import CVyan from "/CV_Adrian_Mulianto_new.pdf";
 import { useEffect, useState } from "react";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
