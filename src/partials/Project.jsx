@@ -78,6 +78,29 @@ export default function Project() {
         <h2 className="text-3xl font-semibold mb-8 text-center text-blue-400 dark:text-blue-200">
           Projects
         </h2>
+        <p className="text-lg font-semibold mb-8 text-center text-blue-400 dark:text-blue-200">
+          Here are some of my projects that I have worked on, both individually
+          and in teams, and i got much more than 20+ projects that i haven't put
+          on here, you can check it on my{" "}
+          <a
+            href="https://github.com/adrianKiv"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-blue-300 dark:hover:text-white transition-colors"
+          >
+            GitHub
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://www.linkedin.com/in/adrianmulianto"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-blue-300 dark:hover:text-white transition-colors"
+          >
+            LinkedIn
+          </a>{" "}
+          profile.
+        </p>
 
         <div className="flex flex-col md:flex-row gap-8">
           {/* Versi HP/iPad: Accordion */}
