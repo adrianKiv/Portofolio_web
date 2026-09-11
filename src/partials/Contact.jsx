@@ -129,7 +129,7 @@ export default function Contact() {
                     name="name"
                     required
                     disabled={status === "sending"}
-                    placeholder="John Doe"
+                    placeholder="Adrian Mulianto"
                     className="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
                   />
                 </div>
@@ -144,7 +144,7 @@ export default function Contact() {
                     name="Email"
                     required
                     disabled={status === "sending"}
-                    placeholder="john@example.com"
+                    placeholder="adrianmulianto@gmail.com"
                     className="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
                   />
                 </div>
