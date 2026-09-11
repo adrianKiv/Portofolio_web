@@ -13,17 +13,31 @@ import GBRHydroculus from "../assets/images/hydroculus.png";
 import GBRDBMS from "../assets/images/DBMS.png";
 import GBRHotel from "../assets/images/hoteljarkom.png";
 import GBRKeepreal from "../assets/images/keepreal.jpg";
+import Fotolulus from "../assets/images/fotolulus.jpeg";
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const [DarkMode, setDarkMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Baca localStorage, jika kosong maka default ke true (Dark Mode)
+  const [DarkMode, setDarkMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme) {
+        return savedTheme === "dark";
+      }
+    }
+    return true;
+  });
+
   useEffect(() => {
+    // Terapkan class dan simpan pilihan ke localStorage
     if (DarkMode) {
       document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
     }
 
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -42,7 +56,7 @@ function Header() {
   ];
 
   return (
-    <div className="bg-white min-h-[80vh] relative overflow-hidden bg-[url('https://images.unsplash.com/photo-1638202201577-63a92d444e4d?q=80&w=2070&auto=format&fit=crop')] bg-no-repeat bg-cover dark:bg-[url('https://images.unsplash.com/photo-1484387436194-cf7cb70800ce?q=80&w=2070&auto=format&fit=crop')]">
+    <div className="bg-white min-h-[80vh] relative overflow-hidden dark:bg-gray-900">
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           scrolled
@@ -135,16 +149,14 @@ function Header() {
                 Adrian Mulianto
               </span>
               <p className="mt-6 text-lg text-black dark:text-gray-300 max-w-lg">
-                Undergraduate computer science student in Universitas Pendidikan
-                Indonesia, software engineer specializing in Full-stack
-                development. I am currently as a Web development intern in Dinas
-                Komunikasi dan Informatika Jawa Barat.
+                Computer Science graduate from Universitas Pendidikan Indonesia
+                and Software Engineer specializing in Full-stack development.
               </p>
               <div className="mt-4">
                 <a
                   href={CVyan}
                   target="_blank"
-                  className="cursor-pointer uppercase bg-white dark:bg-gray-500 px-4 py-2 active:translate-x-0.5 active:translate-y-0.5 hover:shadow-[0.5rem_0.5rem_#F44336,-0.5rem_-0.5rem_#00BCD4] transition"
+                  className="cursor-pointer uppercase bg-gray-200 dark:bg-gray-500 px-4 py-2 active:translate-x-0.5 active:translate-y-0.5 hover:shadow-[0.5rem_0.5rem_#F44336,-0.5rem_-0.5rem_#00BCD4] transition"
                 >
                   Download CV!
                 </a>
@@ -152,38 +164,14 @@ function Header() {
             </div>
 
             {/* Gambar */}
-            <div className="relative rounded-xl overflow-hidden shadow-xl">
-              <Swiper
-                modules={[Autoplay, Pagination]}
-                autoplay={{ delay: 2800, disableOnInteraction: false }}
-                pagination={{ clickable: true }}
-                loop={true}
-                className="w-full aspect-[2/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[2/1]"
-              >
-                {[
-                  { image: GBRUpdown, title: "UpDown Game" },
-                  { image: GBRHydroculus, title: "Hydroculus" },
-                  { image: GBRDBMS, title: "DBMS" },
-                  { image: GBRmedihome, title: "Medifast App" },
-                  { image: GBRHotel, title: "Hotel Network & IOT" },
-                  { image: GBRKeepreal, title: "KeepReal" },
-                ].map((item, index) => (
-                  <SwiperSlide key={index}>
-                    <div className="relative w-full h-full">
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="object-cover w-full h-full"
-                      />
-                      <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                        <h2 className="text-white text-sm sm:text-lg md:text-2xl lg:text-3xl font-bold bg-black/50 px-4 py-2 rounded">
-                          {item.title}
-                        </h2>
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+            {/* Container luar dibatasi lebarnya (max-w-sm) dan di-tengah-kan (mx-auto) */}
+            <div className="relative w-full max-w-sm mx-auto aspect-[4/5] rounded-2xl overflow-hidden shadow-xl border-[1px] border-black dark:border-white group cursor-pointer bg-white">
+              {/* Gambar Utama */}
+              <img
+                src={Fotolulus} /* Ganti dengan variabel gambar Anda */
+                alt="Foto Lulus"
+                className="object-cover w-full h-full transition-transform duration-700 ease-in-out group-hover:scale-105"
+              />
             </div>
           </div>
         </div>

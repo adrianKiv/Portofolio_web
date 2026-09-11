@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import GBRmedihome from "../assets/images/medifastBeranda.png";
 import GBRUpdown from "../assets/images/Updown.png";
 import GBRHydroculus from "../assets/images/hydroculus.png";
@@ -69,200 +69,116 @@ export default function Project() {
     },
   ];
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const selectedProject = selectedIndex !== -1 ? projects[selectedIndex] : null;
-
   return (
-    <section id="projects" className="py-16 bg-white dark:bg-gray-700">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-semibold mb-8 text-center text-blue-400 dark:text-blue-200">
-          Projects
-        </h2>
-        <p className="text-lg font-semibold mb-8 text-center text-blue-400 dark:text-blue-200">
-          Here are some of my projects that I have worked on, both individually
-          and in teams, and i got much more than 20+ projects that i haven't put
-          on here, you can check it on my{" "}
-          <a
-            href="https://github.com/adrianKiv"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-blue-300 dark:hover:text-white transition-colors"
-          >
-            GitHub
-          </a>{" "}
-          and{" "}
-          <a
-            href="https://www.linkedin.com/in/adrianmulianto"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-blue-300 dark:hover:text-white transition-colors"
-          >
-            LinkedIn
-          </a>{" "}
-          profile.
-        </p>
+    <section id="projects" className="py-20 bg-white dark:bg-gray-900">
+      <div className="container mx-auto px-4 md:px-6 max-w-7xl">
+        {/* Header Section */}
+        <div className="text-center mb-16 max-w-3xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-700 mb-4">
+            Featured Projects
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+            Here are some of my projects that I have worked on, both
+            individually and in teams. I have more than 20+ projects that aren't
+            listed here; you can check them on my
+            <a
+              href="https://github.com/adrianKiv"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 dark:text-blue-400 hover:underline font-semibold mx-1"
+            >
+              GitHub
+            </a>
+            and
+            <a
+              href="https://www.linkedin.com/in/adrianmulianto"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 dark:text-blue-400 hover:underline font-semibold mx-1"
+            >
+              LinkedIn
+            </a>
+            profiles.
+          </p>
+        </div>
 
-        <div className="flex flex-col md:flex-row gap-8">
-          {/* Versi HP/iPad: Accordion */}
-          <div className="md:hidden space-y-4">
-            {projects.map((project, index) => (
-              <div
-                key={index}
-                className="border rounded-lg overflow-hidden shadow"
-              >
-                <button
-                  onClick={() =>
-                    setSelectedIndex(selectedIndex === index ? -1 : index)
-                  }
-                  className={`w-full flex justify-between items-center px-4 py-3 font-semibold transition-colors
-                    ${
-                      selectedIndex === index
-                        ? "bg-blue-200 dark:bg-blue-700 text-blue-600 dark:text-white"
-                        : "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-white"
-                    }
-                  `}
-                >
-                  {project.title}
-                  <span
-                    className={`transform transition-transform duration-300 ${
-                      selectedIndex === index ? "rotate-180" : "rotate-0"
-                    }`}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      className="bi bi-caret-down"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659" />
-                    </svg>
-                  </span>
-                </button>
-                {selectedIndex === index && (
-                  <div className="p-4 bg-white dark:bg-gray-800 text-gray-800 dark:text-white space-y-2">
-                    <img
-                      src={project.image}
-                      alt="Project preview"
-                      className="w-full h-auto object-contain rounded-lg shadow"
-                    />
-                    <h4 className="text-lg font-bold">{project.subtitle}</h4>
-                    <p>{project.detail}</p>
-                    <div className="flex gap-2 flex-wrap pt-2">
-                      {project.github && (
-                        <a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="bg-gray-800 hover:bg-gray-900 text-white px-3 py-1 rounded"
-                        >
-                          GitHub
-                        </a>
-                      )}
-                      {project.linkedin && (
-                        <a
-                          href={project.linkedin}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
-                        >
-                          LinkedIn
-                        </a>
-                      )}
-                      {project.youtube && (
-                        <a
-                          href={project.youtube}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                        >
-                          YouTube
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                )}
+        {/* Grid Card Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projects.map((project, index) => (
+            <div
+              key={index}
+              className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col border border-gray-100 dark:border-gray-700 group"
+            >
+              {/* Gambar Proyek */}
+              <div className="relative w-full h-48 md:h-56 overflow-hidden bg-gray-100 dark:bg-gray-700">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
               </div>
-            ))}
-          </div>
 
-          {/* Versi Desktop: List dan Detail */}
-          <div className="hidden md:flex flex-col md:flex-row gap-8">
-            {/* List Proyek */}
-            <div className="w-full md:w-1/3 space-y-4">
-              {projects.map((project, index) => (
-                <button
-                  key={project.title}
-                  onClick={() => setSelectedIndex(index)}
-                  className={`w-full text-left p-4 rounded-lg shadow transition-colors ${
-                    selectedIndex === index
-                      ? "bg-blue-200 dark:bg-blue-600 text-blue-900 dark:text-white"
-                      : "bg-white dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-blue-100 dark:hover:bg-blue-500"
-                  }`}
-                >
-                  <h3 className="text-lg font-semibold">{project.title}</h3>
-                </button>
-              ))}
-            </div>
+              {/* Konten Kartu */}
+              <div className="p-6 flex flex-col flex-grow">
+                {/* Menghapus angka di depan judul agar lebih bersih */}
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                  {project.title.replace(/^\d+\.\s*/, "")}
+                </h3>
 
-            {/* Detail Proyek */}
-            <div className="w-full md:w-2/3 bg-stone-100 dark:bg-gray-700 p-6 rounded-lg shadow-md">
-              {selectedIndex !== -1 && (
-                <>
-                  <img
-                    src={projects[selectedIndex].image}
-                    alt="Project preview"
-                    className="w-full h-auto object-contain rounded-lg shadow mb-3"
-                  />
-                  <h3 className="text-2xl font-bold text-gray-800 dark:text-white">
-                    {projects[selectedIndex].title}
-                  </h3>
-                  <p className="text-blue-500 dark:text-blue-300 font-semibold">
-                    {projects[selectedIndex].subtitle}
-                  </p>
-                  <p className="mt-3 text-gray-600 dark:text-gray-300">
-                    {projects[selectedIndex].detail}
-                  </p>
-                  <p className="text-blue-400 dark:text-gray-800">
-                    More detail about the project on below.
-                  </p>
-                  <div className="flex gap-4 mt-4">
-                    {projects[selectedIndex].github && (
-                      <a
-                        href={projects[selectedIndex].github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded"
-                      >
-                        GitHub
-                      </a>
-                    )}
-                    {projects[selectedIndex].linkedin && (
-                      <a
-                        href={projects[selectedIndex].linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-                      >
-                        LinkedIn
-                      </a>
-                    )}
-                    {projects[selectedIndex].youtube && (
-                      <a
-                        href={projects[selectedIndex].youtube}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                      >
-                        YouTube
-                      </a>
-                    )}
-                  </div>
-                </>
-              )}
+                {/* Badge Teknologi (Membelah subtitle berdasarkan koma) */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.subtitle.split(",").map((tech, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 text-xs font-semibold text-blue-700 bg-blue-50 dark:text-blue-300 dark:bg-blue-900/40 rounded-full whitespace-nowrap"
+                    >
+                      {tech.trim().replace(/^&\s*/, "")}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Deskripsi Proyek */}
+                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed flex-grow mb-6">
+                  {project.detail}
+                </p>
+
+                {/* Tombol Aksi di Footer Kartu */}
+                <div className="flex flex-wrap items-center gap-3 mt-auto pt-4 border-t border-gray-100 dark:border-gray-700">
+                  {project.github && (
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-gray-800 dark:bg-gray-700 hover:bg-gray-900 dark:hover:bg-gray-600 rounded-lg transition-colors"
+                    >
+                      GitHub
+                    </a>
+                  )}
+                  {project.youtube && (
+                    <a
+                      href={project.youtube}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+                    >
+                      YouTube
+                    </a>
+                  )}
+                  {project.linkedin && (
+                    <a
+                      href={project.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+                    >
+                      LinkedIn
+                    </a>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

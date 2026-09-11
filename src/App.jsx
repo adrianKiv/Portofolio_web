@@ -1,7 +1,7 @@
-import GBRHIU from "./assets/images/hiu.png";
-
+import About from "./partials/About.jsx";
 import Experience from "./partials/Experience.jsx";
 import Project from "./partials/Project.jsx";
+import Achievements from "./partials/Achievements.jsx";
 import Contact from "./partials/Contact.jsx";
 import TechStack from "./partials/TechStack.jsx";
 
@@ -123,36 +123,13 @@ function App() {
       </div>
 
       {/* About Section */}
-      <section id="about" className="py-16 bg-white dark:bg-gray-700">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center md:items-start">
-          {/* Gambar di sebelah kiri */}
-          <div className="w-full md:w-1/2 mb-8 md:mb-0 md:pr-8">
-            <img
-              src={GBRHIU}
-              alt="About me"
-              className="rounded-lg shadow-lg mx-auto md:mx-0 w-full max-w-sm"
-            />
-          </div>
-
-          {/* Teks di sebelah kanan */}
-          <div className="w-full md:w-1/2 text-center md:text-left">
-            <h2 className="text-3xl font-semibold mb-4 text-indigo-400 dark:text-indigo-200">
-              About Me
-            </h2>
-            <p className="text-lg text-gray-700 dark:text-indigo-100">
-              I am a computer science student with a strong passion for software
-              development, data, and networking. I have actively participated in
-              programming and data competitions. I am highly enthusiastic about
-              expanding my knowledge in networking, data, and software
-              development. I also enjoy collaborating with others to help
-              improve my skills.
-            </p>
-          </div>
-        </div>
-      </section>
+      <About />
 
       {/* Experience Section */}
       <Experience />
+
+      {/* Achievements Section */}
+      <Achievements />
 
       {/* Project Section */}
       <Project />

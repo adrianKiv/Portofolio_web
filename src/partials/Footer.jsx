@@ -3,7 +3,7 @@ import GBRLOGO from "../assets/images/logo.png";
 function Footer() {
   return (
     <div>
-      <footer className="bg-gray-200 dark:bg-gray-900">
+      <footer className="bg-white dark:bg-gray-900">
         <div className="max-w-screen-xl p-4 py-6 mx-auto lg:py-16 md:p-8 lg:p-10">
           <div className="text-center">
             <a
