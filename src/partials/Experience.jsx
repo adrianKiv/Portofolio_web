@@ -34,7 +34,9 @@ export default function Experience() {
 
   const [selectedExperience, setSelectedExperience] = useState(null);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [activeNodes, setActiveNodes] = useState([]);
   const timelineRef = useRef(null);
+  const nodesRef = useRef([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,22 +45,41 @@ export default function Experience() {
       const rect = timelineRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Animasi akan mulai saat timeline menyentuh bagian tengah layar
+      // Titik pemicu (ujung garis biru) berada persis di tengah layar
       const offset = windowHeight / 2;
 
-      // Hitung seberapa jauh user sudah scroll melewati titik offset
-      const scrollDistance = offset - rect.top;
+      // Hitung jarak scroll dalam pixel
+      let distance = offset - rect.top;
       const totalHeight = rect.height;
 
-      // Ubah menjadi persentase 0 hingga 100
-      let percentage = (scrollDistance / totalHeight) * 100;
-      percentage = Math.max(0, Math.min(100, Math.floor(percentage)));
+      // Batasi tinggi garis agar tidak tembus batas container
+      const drawDistance = Math.max(0, Math.min(totalHeight, distance));
 
-      setScrollProgress(percentage);
+      // Set tinggi garis (dalam %)
+      setScrollProgress((drawDistance / totalHeight) * 100);
+
+      // Kalkulasi piksel akurat untuk menyalakan titik (dot)
+      const newActiveNodes = [];
+      nodesRef.current.forEach((node, index) => {
+        if (node) {
+          const nodeRect = node.getBoundingClientRect();
+          // Jarak persis titik tengah dot dari atas container
+          const dotCenter = nodeRect.top + nodeRect.height / 2;
+
+          // Dot menyala HANYA jika ujung garis telah menyentuh/melewati titik tengahnya
+          if (offset >= dotCenter) {
+            newActiveNodes.push(index);
+          }
+        }
+      });
+
+      // Update state titik yang aktif
+      setActiveNodes(newActiveNodes);
     };
 
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Jalankan sekali saat pertama kali render
+    // Jalankan sekali dengan jeda singkat agar DOM selesai me-render tinggi teks
+    setTimeout(handleScroll, 50);
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -77,10 +98,10 @@ export default function Experience() {
 
         {/* Container Timeline dengan Reference (Ref) */}
         <div className="relative" ref={timelineRef}>
-          {/* Garis Latar Belakang (Abu-abu mati / Biru pudar) */}
+          {/* Garis Latar Belakang */}
           <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-1 bg-blue-200 dark:bg-gray-700 transform md:-translate-x-1/2 rounded-full z-0"></div>
 
-          {/* Garis Indikator Scroll Aktif (Mengisi perlahan) */}
+          {/* Garis Indikator Scroll Aktif */}
           <div
             className="absolute left-6 md:left-1/2 top-0 w-1 bg-blue-600 dark:bg-blue-400 transform md:-translate-x-1/2 rounded-full z-0 transition-all duration-75 ease-out"
             style={{ height: `${scrollProgress}%` }}
@@ -89,40 +110,56 @@ export default function Experience() {
           <div className="space-y-12">
             {experiences.map((exp, index) => {
               const isLeft = index % 2 === 0;
-
-              // Efek tambahan: Titik (dot) akan menyala jika dilewati garis scroll (opsional)
-              // Logika kasarnya: Setiap kartu mewakili proporsi persentase dari total
-              const itemThreshold = (index / (experiences.length - 1)) * 100;
-              const isActiveNode = scrollProgress >= itemThreshold - 5;
+              const isActiveNode = activeNodes.includes(index);
 
               return (
                 <div
                   key={index}
-                  className={`relative flex flex-col md:flex-row items-center justify-between w-full ${isLeft ? "md:flex-row-reverse" : ""}`}
+                  className={`relative flex flex-col md:flex-row items-center justify-between w-full ${
+                    isLeft ? "md:flex-row-reverse" : ""
+                  }`}
                 >
                   {/* Titik/Node Roadmap */}
                   <div
-                    className={`absolute left-6 md:left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full border-[6px] shadow-sm flex items-center justify-center z-10 group hover:scale-110 transition-all duration-500 ${
+                    ref={(el) => (nodesRef.current[index] = el)}
+                    className={`absolute left-6 md:left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full border-[6px] shadow-sm flex items-center justify-center z-10 group hover:scale-110 transition-all duration-300 ${
                       isActiveNode
-                        ? "bg-white dark:bg-gray-800 border-blue-400 dark:border-blue-500"
+                        ? "bg-white dark:bg-gray-800 border-blue-500 dark:border-blue-400"
                         : "bg-white dark:bg-gray-800 border-blue-100 dark:border-gray-700"
                     }`}
                   >
                     <div
-                      className={`w-3.5 h-3.5 rounded-full transition-colors duration-500 ${
+                      className={`w-3.5 h-3.5 rounded-full transition-colors duration-300 ${
                         isActiveNode
                           ? "bg-blue-600 dark:bg-blue-400"
                           : "bg-blue-200 dark:bg-gray-600"
                       }`}
                     ></div>
+
+                    {/* Garis Penghubung Horizontal - BUG FIX DI SINI */}
+                    <div
+                      className={`absolute top-1/2 transform -translate-y-1/2 h-1 -z-10 transition-colors duration-500 w-12 ${
+                        isActiveNode
+                          ? "bg-blue-600 dark:bg-blue-400"
+                          : "bg-blue-200 dark:bg-gray-700"
+                      } ${
+                        isLeft
+                          ? "left-1/2 md:left-auto md:right-1/2" // Di mobile ke kanan, di desktop ke kiri
+                          : "left-1/2" // Selalu ke kanan
+                      }`}
+                    ></div>
                   </div>
 
-                  {/* Spacer (Ruang kosong) */}
-                  <div className="hidden md:block w-[45%]"></div>
+                  {/* Spacer Desktop (Sisi Kosong) */}
+                  <div className="hidden md:block md:w-[calc(50%-3rem)]"></div>
 
                   {/* Kartu Konten */}
                   <div
-                    className={`w-full pl-16 md:pl-0 md:w-[45%] transition-all duration-700 transform ${isActiveNode ? "opacity-100 translate-y-0" : "opacity-80 translate-y-4"}`}
+                    className={`w-full pl-[4.5rem] md:pl-0 md:w-[calc(50%-3rem)] transition-all duration-700 transform ${
+                      isActiveNode
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-80 translate-y-4"
+                    }`}
                   >
                     <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 border border-gray-100 dark:border-gray-700 flex flex-col relative z-20">
                       <div className="mb-4">
@@ -147,9 +184,6 @@ export default function Experience() {
                         className="mt-auto self-start text-sm font-bold text-blue-500 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-2 transition-colors group/btn"
                       >
                         Baca Selengkapnya
-                        {/* <svg className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                        </svg> */}
                       </button>
                     </div>
                   </div>
@@ -160,7 +194,7 @@ export default function Experience() {
         </div>
       </div>
 
-      {/* Pop-up Modal */}
+      {/* Pop-up Modal Tetap Tidak Berubah */}
       {selectedExperience && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity"
@@ -174,18 +208,8 @@ export default function Experience() {
               onClick={() => setSelectedExperience(null)}
               className="absolute top-6 right-6 text-gray-400 hover:text-gray-800 dark:hover:text-white transition-colors"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
 

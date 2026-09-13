@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import GBRmedihome from "../assets/images/medifastBeranda.png";
 import GBRUpdown from "../assets/images/Updown.png";
 import GBRHydroculus from "../assets/images/hydroculus.png";
@@ -69,8 +69,45 @@ export default function Project() {
     },
   ];
 
+  // Ref untuk mengumpulkan semua elemen kartu
+  const cardsRef = useRef([]);
+
+  useEffect(() => {
+    // Observer untuk mendeteksi kapan kartu masuk/keluar dari viewport
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Animasi masuk (muncul & naik)
+            entry.target.classList.remove("opacity-0", "translate-y-12");
+            entry.target.classList.add("opacity-100", "translate-y-0");
+          } else {
+            // Animasi reset saat keluar dari layar
+            entry.target.classList.remove("opacity-100", "translate-y-0");
+            entry.target.classList.add("opacity-0", "translate-y-12");
+          }
+        });
+      },
+      {
+        threshold: 0.1, // Terpicu ketika 10% elemen mulai terlihat
+        rootMargin: "0px",
+      }
+    );
+
+    // Daftarkan setiap kartu ke observer
+    cardsRef.current.forEach((card) => {
+      if (card) observer.observe(card);
+    });
+
+    return () => {
+      cardsRef.current.forEach((card) => {
+        if (card) observer.unobserve(card);
+      });
+    };
+  }, []);
+
   return (
-    <section id="projects" className="py-20 bg-white dark:bg-gray-900">
+    <section id="projects" className="py-20 bg-white dark:bg-gray-900 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         {/* Header Section */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
@@ -107,7 +144,9 @@ export default function Project() {
           {projects.map((project, index) => (
             <div
               key={index}
-              className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col border border-gray-100 dark:border-gray-700 group"
+              ref={(el) => (cardsRef.current[index] = el)} // Hubungkan setiap kartu dengan useRef
+              // Class awal untuk animasi: transparan (opacity-0) dan turun (translate-y-12)
+              className="opacity-0 translate-y-12 transition-all duration-700 ease-out bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transform hover:-translate-y-2 flex flex-col border border-gray-100 dark:border-gray-700 group"
             >
               {/* Gambar Proyek */}
               <div className="relative w-full h-48 md:h-56 overflow-hidden bg-gray-100 dark:bg-gray-700">
