@@ -45,40 +45,32 @@ export default function Experience() {
       const rect = timelineRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Titik pemicu (ujung garis biru) berada persis di tengah layar
+      // Titik pemicu ada persis di tengah layar
       const offset = windowHeight / 2;
 
-      // Hitung jarak scroll dalam pixel
       let distance = offset - rect.top;
       const totalHeight = rect.height;
 
-      // Batasi tinggi garis agar tidak tembus batas container
       const drawDistance = Math.max(0, Math.min(totalHeight, distance));
 
-      // Set tinggi garis (dalam %)
       setScrollProgress((drawDistance / totalHeight) * 100);
 
-      // Kalkulasi piksel akurat untuk menyalakan titik (dot)
       const newActiveNodes = [];
       nodesRef.current.forEach((node, index) => {
         if (node) {
           const nodeRect = node.getBoundingClientRect();
-          // Jarak persis titik tengah dot dari atas container
           const dotCenter = nodeRect.top + nodeRect.height / 2;
 
-          // Dot menyala HANYA jika ujung garis telah menyentuh/melewati titik tengahnya
           if (offset >= dotCenter) {
             newActiveNodes.push(index);
           }
         }
       });
 
-      // Update state titik yang aktif
       setActiveNodes(newActiveNodes);
     };
 
     window.addEventListener("scroll", handleScroll);
-    // Jalankan sekali dengan jeda singkat agar DOM selesai me-render tinggi teks
     setTimeout(handleScroll, 50);
 
     return () => window.removeEventListener("scroll", handleScroll);
@@ -96,14 +88,13 @@ export default function Experience() {
           </h2>
         </div>
 
-        {/* Container Timeline dengan Reference (Ref) */}
         <div className="relative" ref={timelineRef}>
-          {/* Garis Latar Belakang */}
-          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-1 bg-blue-200 dark:bg-gray-700 transform md:-translate-x-1/2 rounded-full z-0"></div>
+          {/* Garis Latar Belakang (Vertikal) */}
+          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-1 bg-blue-200 dark:bg-gray-700 transform -translate-x-1/2 rounded-full z-0"></div>
 
-          {/* Garis Indikator Scroll Aktif */}
+          {/* Garis Indikator Scroll Aktif (Vertikal) */}
           <div
-            className="absolute left-6 md:left-1/2 top-0 w-1 bg-blue-600 dark:bg-blue-400 transform md:-translate-x-1/2 rounded-full z-0 transition-all duration-75 ease-out"
+            className="absolute left-6 md:left-1/2 top-0 w-1 bg-blue-600 dark:bg-blue-400 transform -translate-x-1/2 rounded-full z-0 transition-all duration-75 ease-out"
             style={{ height: `${scrollProgress}%` }}
           ></div>
 
@@ -119,10 +110,10 @@ export default function Experience() {
                     isLeft ? "md:flex-row-reverse" : ""
                   }`}
                 >
-                  {/* Titik/Node Roadmap */}
+                  {/* Titik/Node Roadmap - Perbaikan posisi vertical center (-translate-y-1/2) */}
                   <div
                     ref={(el) => (nodesRef.current[index] = el)}
-                    className={`absolute left-6 md:left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full border-[6px] shadow-sm flex items-center justify-center z-10 group hover:scale-110 transition-all duration-300 ${
+                    className={`absolute top-1/2 left-6 md:left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full border-[6px] shadow-sm flex items-center justify-center z-10 group hover:scale-110 transition-all duration-300 ${
                       isActiveNode
                         ? "bg-white dark:bg-gray-800 border-blue-500 dark:border-blue-400"
                         : "bg-white dark:bg-gray-800 border-blue-100 dark:border-gray-700"
@@ -136,26 +127,26 @@ export default function Experience() {
                       }`}
                     ></div>
 
-                    {/* Garis Penghubung Horizontal - BUG FIX DI SINI */}
+                    {/* Garis Penghubung Horizontal - Jarak diubah jadi lebih dekat (w-10) */}
                     <div
-                      className={`absolute top-1/2 transform -translate-y-1/2 h-1 -z-10 transition-colors duration-500 w-12 ${
+                      className={`absolute top-1/2 transform -translate-y-1/2 h-1 w-10 -z-10 transition-colors duration-500 ${
                         isActiveNode
                           ? "bg-blue-600 dark:bg-blue-400"
                           : "bg-blue-200 dark:bg-gray-700"
                       } ${
                         isLeft
-                          ? "left-1/2 md:left-auto md:right-1/2" // Di mobile ke kanan, di desktop ke kiri
+                          ? "left-1/2 md:left-auto md:right-1/2" // Desktop ke kiri, Mobile ke kanan
                           : "left-1/2" // Selalu ke kanan
                       }`}
                     ></div>
                   </div>
 
-                  {/* Spacer Desktop (Sisi Kosong) */}
-                  <div className="hidden md:block md:w-[calc(50%-3rem)]"></div>
+                  {/* Spacer Desktop - Dikalibrasi agar jarak lebih dekat (gap 2.5rem) */}
+                  <div className="hidden md:block md:w-[calc(50%-2.5rem)]"></div>
 
                   {/* Kartu Konten */}
                   <div
-                    className={`w-full pl-[4.5rem] md:pl-0 md:w-[calc(50%-3rem)] transition-all duration-700 transform ${
+                    className={`w-full pl-16 md:pl-0 md:w-[calc(50%-2.5rem)] transition-all duration-700 transform ${
                       isActiveNode
                         ? "opacity-100 translate-y-0"
                         : "opacity-80 translate-y-4"
@@ -194,7 +185,7 @@ export default function Experience() {
         </div>
       </div>
 
-      {/* Pop-up Modal Tetap Tidak Berubah */}
+      {/* Pop-up Modal */}
       {selectedExperience && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity"
