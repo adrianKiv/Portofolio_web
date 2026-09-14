@@ -79,7 +79,7 @@ export default function Experience() {
   return (
     <section
       id="experiences"
-      className="py-20 bg-white dark:bg-gray-900 relative"
+      className="py-20 bg-white dark:bg-gray-900 relative overflow-hidden"
     >
       <div className="container mx-auto px-4 md:px-6 max-w-6xl">
         <div className="text-center mb-16">
@@ -92,9 +92,9 @@ export default function Experience() {
           {/* Garis Latar Belakang (Vertikal) */}
           <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-1 bg-blue-200 dark:bg-gray-700 transform -translate-x-1/2 rounded-full z-0"></div>
 
-          {/* Garis Indikator Scroll Aktif (Vertikal) */}
+          {/* Garis Indikator Scroll Aktif (Vertikal) dengan efek glow */}
           <div
-            className="absolute left-6 md:left-1/2 top-0 w-1 bg-blue-600 dark:bg-blue-400 transform -translate-x-1/2 rounded-full z-0 transition-all duration-75 ease-out"
+            className="absolute left-6 md:left-1/2 top-0 w-1 bg-blue-500 dark:bg-blue-400 transform -translate-x-1/2 rounded-full z-0 transition-all duration-75 ease-out shadow-[0_0_8px_#3b82f6]"
             style={{ height: `${scrollProgress}%` }}
           ></div>
 
@@ -110,72 +110,82 @@ export default function Experience() {
                     isLeft ? "md:flex-row-reverse" : ""
                   }`}
                 >
-                  {/* Titik/Node Roadmap - Perbaikan posisi vertical center (-translate-y-1/2) */}
+                  {/* Titik/Node Roadmap */}
                   <div
                     ref={(el) => (nodesRef.current[index] = el)}
                     className={`absolute top-1/2 left-6 md:left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full border-[6px] shadow-sm flex items-center justify-center z-10 group hover:scale-110 transition-all duration-300 ${
                       isActiveNode
-                        ? "bg-white dark:bg-gray-800 border-blue-500 dark:border-blue-400"
+                        ? "bg-white dark:bg-gray-800 border-blue-500 dark:border-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.5)]"
                         : "bg-white dark:bg-gray-800 border-blue-100 dark:border-gray-700"
                     }`}
                   >
                     <div
                       className={`w-3.5 h-3.5 rounded-full transition-colors duration-300 ${
                         isActiveNode
-                          ? "bg-blue-600 dark:bg-blue-400"
+                          ? "bg-blue-500 dark:bg-blue-400"
                           : "bg-blue-200 dark:bg-gray-600"
                       }`}
                     ></div>
 
-                    {/* Garis Penghubung Horizontal - Jarak diubah jadi lebih dekat (w-10) */}
+                    {/* Garis Penghubung Horizontal (Animasi menembak ke arah kotak) */}
                     <div
-                      className={`absolute top-1/2 transform -translate-y-1/2 h-1 w-10 -z-10 transition-colors duration-500 ${
+                      className={`absolute top-1/2 transform -translate-y-1/2 h-1 -z-10 transition-all duration-500 ease-out ${
                         isActiveNode
-                          ? "bg-blue-600 dark:bg-blue-400"
-                          : "bg-blue-200 dark:bg-gray-700"
+                          ? "w-10 bg-blue-500 shadow-[0_0_8px_#3b82f6]"
+                          : "w-0 bg-transparent"
                       } ${
                         isLeft
-                          ? "left-1/2 md:left-auto md:right-1/2" // Desktop ke kiri, Mobile ke kanan
-                          : "left-1/2" // Selalu ke kanan
+                          ? "left-1/2 md:left-auto md:right-1/2" // Di mobile tembak ke kanan, di desktop tembak ke kiri
+                          : "left-1/2" // Selalu tembak ke kanan
                       }`}
                     ></div>
                   </div>
 
-                  {/* Spacer Desktop - Dikalibrasi agar jarak lebih dekat (gap 2.5rem) */}
+                  {/* Spacer Desktop */}
                   <div className="hidden md:block md:w-[calc(50%-2.5rem)]"></div>
 
-                  {/* Kartu Konten */}
+                  {/* Kartu Konten Wrapper */}
                   <div
                     className={`w-full pl-16 md:pl-0 md:w-[calc(50%-2.5rem)] transition-all duration-700 transform ${
                       isActiveNode
                         ? "opacity-100 translate-y-0"
-                        : "opacity-80 translate-y-4"
+                        : "opacity-60 translate-y-8"
                     }`}
                   >
-                    <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 border border-gray-100 dark:border-gray-700 flex flex-col relative z-20">
-                      <div className="mb-4">
-                        <span className="inline-block px-4 py-1.5 text-xs font-bold text-blue-700 bg-blue-50 dark:text-blue-300 dark:bg-blue-900/40 rounded-full">
-                          {exp.date}
-                        </span>
+                    {/* Wadah Animasi Bingkai Menyala Solid (Aktif Terus) */}
+                    <div
+                      className={`relative rounded-2xl p-[2px] z-20 transition-all duration-700 ease-in-out ${
+                        isActiveNode
+                          ? "bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.6)] delay-[400ms]" // Menyala setelah garis sampai (delay 400ms)
+                          : "bg-gray-200 dark:bg-gray-700 shadow-sm delay-0" // Mati seketika saat keluar layar
+                      }`}
+                    >
+                      {/* Box Background Bagian Dalam */}
+                      <div className="bg-white dark:bg-gray-800 p-6 rounded-[14px] relative z-10 flex flex-col h-full">
+                        <div className="mb-4">
+                          <span className="inline-block px-4 py-1.5 text-xs font-bold text-blue-700 bg-blue-50 dark:text-blue-300 dark:bg-blue-900/40 rounded-full">
+                            {exp.date}
+                          </span>
+                        </div>
+
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white leading-tight">
+                          {exp.title}
+                        </h3>
+                        <p className="text-sm font-medium text-blue-500 dark:text-blue-400 mb-4 mt-1">
+                          @{exp.subtitle}
+                        </p>
+
+                        <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed line-clamp-3 mb-6 flex-1">
+                          {exp.detail}
+                        </p>
+
+                        <button
+                          onClick={() => setSelectedExperience(exp)}
+                          className="mt-auto self-start text-sm font-bold text-blue-500 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-2 transition-colors group/btn"
+                        >
+                          Baca Selengkapnya
+                        </button>
                       </div>
-
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white leading-tight">
-                        {exp.title}
-                      </h3>
-                      <p className="text-sm font-medium text-blue-500 dark:text-blue-400 mb-4 mt-1">
-                        @{exp.subtitle}
-                      </p>
-
-                      <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed line-clamp-3 mb-6 flex-1">
-                        {exp.detail}
-                      </p>
-
-                      <button
-                        onClick={() => setSelectedExperience(exp)}
-                        className="mt-auto self-start text-sm font-bold text-blue-500 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-2 transition-colors group/btn"
-                      >
-                        Baca Selengkapnya
-                      </button>
                     </div>
                   </div>
                 </div>

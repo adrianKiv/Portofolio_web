@@ -1,5 +1,5 @@
 import GBRLOGO from "../assets/images/logo.png";
-import CVyan from "/CV_Adrian_Mulianto_new.pdf";
+import CVyan from "/CV_Adrian_Mulianto.pdf";
 import { useEffect, useState } from "react";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
@@ -137,9 +137,18 @@ function Header() {
               <span className="font-eduVIC text-transparent text-6xl font-bold bg-gradient-to-r bg-clip-text from-gray-600 to-gray-400 dark:from-sky-400 dark:to-sky-200 mt-2 block">
                 Adrian Mulianto
               </span>
-              <p className="mt-6 text-lg text-black dark:text-gray-300 max-w-lg">
+              <p className="mt-6 text-lg text-black dark:text-gray-300 max-w-lg leading-relaxed">
                 Computer Science graduate from Universitas Pendidikan Indonesia
-                and Software Engineer specializing in Full-stack development.
+                and Software Engineer specializing in{" "}
+                <span className="relative inline-block group cursor-default">
+                  {/* Efek Cahaya (Glow) di belakang teks yang berdenyut */}
+                  <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-sky-400 blur-md opacity-40 group-hover:opacity-80 animate-pulse transition-opacity duration-500"></span>
+
+                  {/* Teks Utama dengan warna gradien biru */}
+                  <span className="relative font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-sky-500 dark:from-blue-400 dark:to-sky-300">
+                    Full-stack development.
+                  </span>
+                </span>
               </p>
 
               <div className="mt-8">

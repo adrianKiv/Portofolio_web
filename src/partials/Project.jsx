@@ -5,11 +5,22 @@ import GBRHydroculus from "../assets/images/hydroculus.png";
 import GBRDBMS from "../assets/images/DBMS.png";
 import GBRHotel from "../assets/images/hoteljarkom.png";
 import GBRKeepreal from "../assets/images/keepreal.jpg";
+import GBRWEBGIS from "../assets/images/webgis2.png";
 
 export default function Project() {
   const projects = [
     {
-      title: "1. Up Down platformer game",
+      title: "1. WebGIS Kuliner UPI",
+      subtitle: "Laravel, MVC, WebGIS, HTML, CSS, JavaCript, PHP, & MySQL",
+      detail:
+        "Developing a web-based application using Laravel, Leaflet.js, OpenStreetMap, and MySQL for mapping and recommending culinary MSMEs around UPI campus. The application has two types of users: the campus academic community (students, lecturers, and staff) and administrators who verify merchant submissions. The purpose of this application is to facilitate users in discovering personalized culinary options using Content-Based Filtering, navigating locations via real-time route tracking, and helping local micro-merchants increase digital promotional visibility through crowdsourced submissions.",
+      image: GBRWEBGIS,
+      github: "https://github.com/adrianKiv/web-umkm",
+      linkedin: "https://www.linkedin.com/in/adrianmulianto/details/projects/",
+      youtube: "",
+    },
+    {
+      title: "2. Up Down platformer game",
       subtitle:
         "Java, OOP (Object-Oriented Programming), MVVM (Model-view-viewmodel), & MySQL",
       detail:
@@ -20,22 +31,12 @@ export default function Project() {
       youtube: "https://youtu.be/elperHV679c",
     },
     {
-      title: "2. Medifast",
+      title: "3. Medifast",
       subtitle: "Flutter, Dart, FastAPI, Python & SQLite",
       detail:
         "Medifast is a mobile application designed for hospital needs. This mobile application presents various features that help in making appointments with doctors. Apart from that, a feature for printing digital prescriptions makes things easier for users without having to carry physical prescriptions.",
       image: GBRmedihome,
       github: "https://github.com/adrianKiv/medifast",
-      linkedin: "https://www.linkedin.com/in/adrianmulianto/details/projects/",
-      youtube: "",
-    },
-    {
-      title: "3. Hydroculus",
-      subtitle: "HTML, CSS, JavaCript, PHP, & MySQL",
-      detail:
-        "HydroCulus is a website focused on locating and mapping water sources in Indonesia. It offers comprehensive information about various water sources, such as springs, rivers, reservoirs, and lakes, along with their characteristics, including water condition, temperature, color, pH, and drinkability.",
-      image: GBRHydroculus,
-      github: "https://github.com/adrianKiv/Tubes_SBD",
       linkedin: "https://www.linkedin.com/in/adrianmulianto/details/projects/",
       youtube: "",
     },
