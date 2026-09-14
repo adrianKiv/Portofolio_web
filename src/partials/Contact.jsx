@@ -72,9 +72,7 @@ export default function Contact() {
                       />
                     </svg>
                   </div>
-                  <span className="font-medium">
-                    adrianmulianto@gmail.com
-                  </span>
+                  <span className="font-medium">adrianmulianto@gmail.com</span>
                 </div>
 
                 {/* Location Info */}

@@ -91,7 +91,7 @@ export default function Project() {
       {
         threshold: 0.1, // Terpicu ketika 10% elemen mulai terlihat
         rootMargin: "0px",
-      }
+      },
     );
 
     // Daftarkan setiap kartu ke observer
@@ -107,7 +107,10 @@ export default function Project() {
   }, []);
 
   return (
-    <section id="projects" className="py-20 bg-white dark:bg-gray-900 overflow-hidden">
+    <section
+      id="projects"
+      className="py-20 bg-white dark:bg-gray-900 overflow-hidden"
+    >
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         {/* Header Section */}
         <div className="text-center mb-16 max-w-3xl mx-auto">

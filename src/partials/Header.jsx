@@ -3,23 +3,12 @@ import CVyan from "/CV_Adrian_Mulianto_new.pdf";
 import { useEffect, useState } from "react";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
-import GBRmedihome from "../assets/images/medifastBeranda.png";
-import GBRUpdown from "../assets/images/Updown.png";
-import GBRHydroculus from "../assets/images/hydroculus.png";
-import GBRDBMS from "../assets/images/DBMS.png";
-import GBRHotel from "../assets/images/hoteljarkom.png";
-import GBRKeepreal from "../assets/images/keepreal.jpg";
 import Fotolulus from "../assets/images/fotolulus.jpeg";
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Baca localStorage, jika kosong maka default ke true (Dark Mode)
   const [DarkMode, setDarkMode] = useState(() => {
     if (typeof window !== "undefined") {
       const savedTheme = localStorage.getItem("theme");
@@ -31,7 +20,6 @@ function Header() {
   });
 
   useEffect(() => {
-    // Terapkan class dan simpan pilihan ke localStorage
     if (DarkMode) {
       document.documentElement.classList.add("dark");
       localStorage.setItem("theme", "dark");
@@ -85,8 +73,8 @@ function Header() {
                   href={link.href}
                   className={`px-3 py-2 font-bold text-[18px] rounded-md transition-colors duration-300 ${
                     scrolled
-                      ? "text-indigo-900 hover:text-indigo-600 dark:text-indigo-300 dark:hover:text-indigo-100"
-                      : "text-indigo-800 hover:text-indigo-400 dark:text-gray-300 dark:hover:text-indigo-700"
+                      ? "text-blue-900 hover:text-blue-600 dark:text-blue-300 dark:hover:text-blue-100"
+                      : "text-blue-800 hover:text-blue-400 dark:text-gray-300 dark:hover:text-blue-700"
                   }`}
                 >
                   {link.text}
@@ -137,41 +125,56 @@ function Header() {
         )}
       </nav>
 
-      {/* Hero Content */}
-      <div className="pt-32 pb-16 sm:pt-32 lg:pb-10 sm:pb-12 relative z-0">
+      {/* Hero Content - Padding bawah (pb) diperbesar agar animasi tidak terpotong */}
+      <div className="pt-32 pb-28 lg:pb-24 relative z-0">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <div className="lg:grid lg:grid-cols-2 lg:gap-12 items-center">
-            <div className="mb-8 lg:mb-8">
+            {/* Bagian Kiri (Teks & Tombol) */}
+            <div className="mb-16 lg:mb-8 text-center lg:text-left flex flex-col items-center lg:items-start">
               <h1 className="text-3xl sm:text-5xl lg:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-gray-600 to-gray-400 dark:from-sky-300 dark:to-sky-100">
                 Hi, my name is <br />
               </h1>
-              <span className="font-eduVIC text-transparent text-6xl font-bold bg-gradient-to-r bg-clip-text from-gray-600 to-gray-400 dark:from-sky-400 dark:to-sky-200">
+              <span className="font-eduVIC text-transparent text-6xl font-bold bg-gradient-to-r bg-clip-text from-gray-600 to-gray-400 dark:from-sky-400 dark:to-sky-200 mt-2 block">
                 Adrian Mulianto
               </span>
               <p className="mt-6 text-lg text-black dark:text-gray-300 max-w-lg">
                 Computer Science graduate from Universitas Pendidikan Indonesia
                 and Software Engineer specializing in Full-stack development.
               </p>
-              <div className="mt-4">
+
+              <div className="mt-8">
                 <a
                   href={CVyan}
                   target="_blank"
-                  className="cursor-pointer uppercase bg-gray-200 dark:bg-gray-500 px-4 py-2 active:translate-x-0.5 active:translate-y-0.5 hover:shadow-[0.5rem_0.5rem_#F44336,-0.5rem_-0.5rem_#00BCD4] transition"
+                  className="cursor-pointer uppercase bg-gray-200 dark:bg-gray-500 px-4 py-2 active:translate-x-0.5 active:translate-y-0.5 hover:shadow-[0.5rem_0.5rem_#F44336,-0.5rem_-0.5rem_#00BCD4] transition inline-block text-gray-900 dark:text-white font-bold"
                 >
                   Download CV!
                 </a>
               </div>
             </div>
 
-            {/* Gambar */}
-            {/* Container luar dibatasi lebarnya (max-w-sm) dan di-tengah-kan (mx-auto) */}
-            <div className="relative w-full max-w-sm mx-auto aspect-[4/5] rounded-2xl overflow-hidden shadow-xl border-[1px] border-black dark:border-white group cursor-pointer bg-white">
-              {/* Gambar Utama */}
-              <img
-                src={Fotolulus} /* Ganti dengan variabel gambar Anda */
-                alt="Foto Lulus"
-                className="object-cover w-full h-full transition-transform duration-700 ease-in-out group-hover:scale-105"
-              />
+            {/* Bagian Kanan (Gambar dengan Animasi Lapis 3D) - Margin bawah (mb-10) ditambahkan untuk mobile */}
+            <div className="relative w-full max-w-xs sm:max-w-sm mx-auto aspect-[4/5] z-10 group mt-8 lg:mt-0 mb-10 lg:mb-0">
+              {/* Layer Belakang: Aura Blur Statis */}
+              <div className="absolute inset-0 bg-gradient-to-r from-sky-400 to-indigo-500 rounded-2xl blur-2xl opacity-20 dark:opacity-40 z-0"></div>
+
+              {/* Layer 1: Cincin Putus-putus (Berputar searah jarum jam di belakang gambar) */}
+              <div className="absolute -inset-6 border-[2px] border-dashed border-sky-400/40 dark:border-sky-300/30 rounded-[2.5rem] animate-[spin_12s_linear_infinite] z-0 pointer-events-none"></div>
+
+              {/* Layer 2: Cincin Solid (Berputar berlawanan jarum jam di depan bingkai utama) */}
+              <div className="absolute -inset-2 border-[4px] border-transparent border-t-sky-400 border-b-sky-400 rounded-[1.5rem] animate-[spin_6s_linear_infinite_reverse] z-20 pointer-events-none opacity-80"></div>
+
+              {/* Layer Utama: Wadah Gambar */}
+              <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl z-10 bg-gray-200 dark:bg-gray-800 border-[1px] border-gray-300 dark:border-gray-700">
+                <img
+                  src={Fotolulus}
+                  alt="Foto Lulus"
+                  className="object-cover w-full h-full transition-transform duration-700 ease-in-out group-hover:scale-110"
+                />
+
+                {/* Layer 3: Efek Cahaya Lewat di Depan Gambar (Sweep menyilang) */}
+                <div className="absolute top-0 -left-[150%] w-[100%] h-full z-30 transform -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:left-[150%] transition-all duration-1000 ease-in-out pointer-events-none"></div>
+              </div>
             </div>
           </div>
         </div>
