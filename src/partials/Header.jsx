@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
 import Fotolulus from "../assets/images/fotolulus.jpeg";
-import Fotocandi from "../assets/images/fotocandi.jpg";
+import Fotocandi from "../assets/images/fotocandi.JPG";
 
 function Header() {
   // --- STATE UNTUK ANIMASI KETIK (TYPING EFFECT) ---
