@@ -103,7 +103,7 @@ export default function TechStack() {
         {/* Header Section */}
         <div className="text-center mb-16 max-w-2xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-700 mb-4">
-            Tech Stack
+            Tech Stacks
           </h2>
           <p className="text-gray-600 dark:text-gray-400 text-lg">
             Technologies, languages, and tools I use to build scalable
