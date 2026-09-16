@@ -4,8 +4,51 @@ import { useEffect, useState } from "react";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
 import Fotolulus from "../assets/images/fotolulus.jpeg";
+import Fotocandi from "../assets/images/fotocandi.jpg";
 
 function Header() {
+  // --- STATE UNTUK ANIMASI KETIK (TYPING EFFECT) ---
+  const [text, setText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loopNum, setLoopNum] = useState(0);
+  const [typingSpeed, setTypingSpeed] = useState(150);
+
+  const words = [
+    "Full-stack Developer.",
+    "Backend Developer.",
+    "Frontend Developer.",
+  ];
+
+  useEffect(() => {
+    const handleTyping = () => {
+      const i = loopNum % words.length;
+      const fullText = words[i];
+
+      // Tentukan apakah sedang menambah atau mengurangi huruf
+      setText(
+        isDeleting
+          ? fullText.substring(0, text.length - 1)
+          : fullText.substring(0, text.length + 1),
+      );
+
+      // Atur kecepatan (mengetik lebih lambat, menghapus lebih cepat)
+      setTypingSpeed(isDeleting ? 50 : 150);
+
+      // Jika kata sudah selesai diketik, beri jeda sebelum menghapus
+      if (!isDeleting && text === fullText) {
+        setTimeout(() => setIsDeleting(true), 1500);
+      }
+      // Jika kata sudah selesai dihapus, lanjut ke kata berikutnya
+      else if (isDeleting && text === "") {
+        setIsDeleting(false);
+        setLoopNum(loopNum + 1);
+      }
+    };
+
+    const timer = setTimeout(handleTyping, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [text, isDeleting, loopNum, typingSpeed]);
+
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -40,6 +83,7 @@ function Header() {
     { text: "About", href: "#about" },
     { text: "Experiences", href: "#experiences" },
     { text: "Project", href: "#projects" },
+    { text: "Tech Stack", href: "#techstacks" },
     { text: "Contact", href: "#contact" },
   ];
 
@@ -137,16 +181,22 @@ function Header() {
               <span className="font-eduVIC text-transparent text-6xl font-bold bg-gradient-to-r bg-clip-text from-gray-600 to-gray-400 dark:from-sky-400 dark:to-sky-200 mt-2 block">
                 Adrian Mulianto
               </span>
-              <p className="mt-6 text-lg text-black dark:text-gray-300 max-w-lg leading-relaxed">
+              <p className="mt-6 text-lg text-black dark:text-gray-300 max-w-lg leading-relaxed h-[80px]">
                 Computer Science graduate from Universitas Pendidikan Indonesia
-                and Software Engineer specializing in{" "}
+                and Software Engineer specializing in <br></br>{" "}
                 <span className="relative inline-block group cursor-default">
                   {/* Efek Cahaya (Glow) di belakang teks yang berdenyut */}
                   <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-sky-400 blur-md opacity-40 group-hover:opacity-80 animate-pulse transition-opacity duration-500"></span>
 
-                  {/* Teks Utama dengan warna gradien biru */}
-                  <span className="relative font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-sky-500 dark:from-blue-400 dark:to-sky-300">
-                    Full-stack development.
+                  {/* Teks Utama dengan warna gradien biru dan Kursor */}
+                  <span className="relative font-extrabold whitespace-nowrap">
+                    <span className="text-transparent text-4xl bg-clip-text bg-gradient-to-r from-blue-600 to-sky-500 dark:from-blue-400 dark:to-sky-300">
+                      {text}
+                    </span>
+                    {/* Kursor yang berkedip */}
+                    <span className="text-blue-600 dark:text-sky-400 animate-pulse font-light ml-1">
+                      |
+                    </span>
                   </span>
                 </span>
               </p>
@@ -171,13 +221,13 @@ function Header() {
               <div className="absolute -inset-6 border-[2px] border-dashed border-sky-400/40 dark:border-sky-300/30 rounded-[2.5rem] animate-[spin_12s_linear_infinite] z-0 pointer-events-none"></div>
 
               {/* Layer 2: Cincin Solid (Berputar berlawanan jarum jam di depan bingkai utama) */}
-              <div className="absolute -inset-2 border-[4px] border-transparent border-t-sky-400 border-b-sky-400 rounded-[1.5rem] animate-[spin_6s_linear_infinite_reverse] z-20 pointer-events-none opacity-80"></div>
+              <div className="absolute -inset-6 border-[2px] border-dashed border-sky-400/40 dark:border-sky-300/30 rounded-[2.5rem] animate-[spin_12s_linear_infinite_reverse] z-0 pointer-events-none"></div>
 
               {/* Layer Utama: Wadah Gambar */}
               <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl z-10 bg-gray-200 dark:bg-gray-800 border-[1px] border-gray-300 dark:border-gray-700">
                 <img
-                  src={Fotolulus}
-                  alt="Foto Lulus"
+                  src={Fotocandi}
+                  alt="Foto Candi"
                   className="object-cover w-full h-full transition-transform duration-700 ease-in-out group-hover:scale-110"
                 />
 

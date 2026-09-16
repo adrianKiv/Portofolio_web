@@ -96,7 +96,7 @@ export default function TechStack() {
 
   return (
     <section
-      id="tech"
+      id="techstacks"
       className="py-20 bg-gray-50 dark:bg-gray-900 overflow-hidden"
     >
       <div className="container mx-auto px-4 md:px-6 max-w-6xl">
@@ -159,3 +159,4 @@ export default function TechStack() {
     </section>
   );
 }
+
