@@ -181,19 +181,20 @@ function Header() {
               <span className="font-eduVIC text-transparent text-6xl font-bold bg-gradient-to-r bg-clip-text from-gray-600 to-gray-400 dark:from-sky-400 dark:to-sky-200 mt-2 block">
                 Adrian Mulianto
               </span>
-              <p className="mt-6 text-lg text-black dark:text-gray-300 max-w-lg leading-relaxed h-[80px]">
+              <p className="mt-6 text-base sm:text-lg text-black dark:text-gray-300 max-w-lg leading-relaxed min-h-[120px] md:min-h-[100px]">
                 Computer Science graduate from Universitas Pendidikan Indonesia
-                and Software Engineer specializing in <br></br>{" "}
-                <span className="relative inline-block group cursor-default">
+                and Software Engineer specializing in
+                {/* Membuat efek ketik selalu berada di baris baru agar tidak tumpang tindih */}
+                <span className="relative block w-fit mx-auto lg:mx-0 mt-2 group cursor-default">
                   {/* Efek Cahaya (Glow) di belakang teks yang berdenyut */}
                   <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-sky-400 blur-md opacity-40 group-hover:opacity-80 animate-pulse transition-opacity duration-500"></span>
 
                   {/* Teks Utama dengan warna gradien biru dan Kursor */}
-                  <span className="relative font-extrabold whitespace-nowrap">
-                    <span className="text-transparent text-4xl bg-clip-text bg-gradient-to-r from-blue-600 to-sky-500 dark:from-blue-400 dark:to-sky-300">
+                  {/* Mengatur ukuran teks responsif: text-2xl di mobile, text-3xl di layar agak besar */}
+                  <span className="relative font-extrabold whitespace-nowrap text-2xl sm:text-3xl">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-sky-500 dark:from-blue-400 dark:to-sky-300">
                       {text}
                     </span>
-                    {/* Kursor yang berkedip */}
                     <span className="text-blue-600 dark:text-sky-400 animate-pulse font-light ml-1">
                       |
                     </span>
