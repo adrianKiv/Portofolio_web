@@ -99,7 +99,7 @@ export default function Contact() {
                     </svg>
                   </div>
                   <span className="font-medium">
-                    Bandung, West Java - Indonesia
+                    Sukabumi, West Java - Indonesia
                   </span>
                 </div>
               </div>
