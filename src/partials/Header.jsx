@@ -5,6 +5,7 @@ import { FiSun, FiMoon } from "react-icons/fi";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
 import Fotolulus from "../assets/images/fotolulus.jpeg";
 import Fotocandi from "../assets/images/fotocandi.JPG";
+import Fotowis from "../assets/images/fotowis.jpeg";
 
 function Header() {
   // --- STATE UNTUK ANIMASI KETIK (TYPING EFFECT) ---
@@ -227,8 +228,8 @@ function Header() {
               {/* Layer Utama: Wadah Gambar */}
               <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl z-10 bg-gray-200 dark:bg-gray-800 border-[1px] border-gray-300 dark:border-gray-700">
                 <img
-                  src={Fotocandi}
-                  alt="Foto Candi"
+                  src={Fotowis}
+                  alt="Foto wis"
                   className="object-cover w-full h-full transition-transform duration-700 ease-in-out group-hover:scale-110"
                 />
 
