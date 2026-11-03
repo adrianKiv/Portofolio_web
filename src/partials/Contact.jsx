@@ -51,7 +51,7 @@ export default function Contact() {
             <div>
               <h3 className="text-2xl font-bold mb-4">Contact Information</h3>
               <p className="text-blue-100 mb-8 leading-relaxed">
-                Fill up the form and I will get back to you within 24 hours.
+                {/* Fill up the form and I will get back to you within 24 hours. */}
               </p>
 
               <div className="space-y-6">
@@ -114,110 +114,54 @@ export default function Contact() {
           </div>
 
           {/* Sisi Kanan: Form Input */}
-          <div className="lg:w-3/5 p-10 md:p-14">
-            <form onSubmit={sendEmail} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Field Name */}
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    Your Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    disabled={status === "sending"}
-                    placeholder="Adrian Mulianto"
-                    className="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
-                  />
-                </div>
 
-                {/* Field Email */}
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    Your Email
-                  </label>
-                  <input
-                    type="email"
-                    name="Email"
-                    required
-                    disabled={status === "sending"}
-                    placeholder="adrianmulianto@gmail.com"
-                    className="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
-                  />
-                </div>
+          {/* <div className="md:w-1/2">
+            <form className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-white">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  className="mt-1 block w-full bg-white/10 border border-white/20 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Your Name"
+                />
               </div>
-
-              {/* Field Message */}
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-white">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  className="mt-1 block w-full bg-white/10 border border-white/20 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Your Email"
+                />
+              </div>
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium text-white">
                   Message
                 </label>
                 <textarea
-                  name="message"
-                  rows="5"
-                  required
-                  disabled={status === "sending"}
-                  placeholder="How can I help you?"
-                  className="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none disabled:opacity-50"
+                  id="message"
+                  rows={4}
+                  className="mt-1 block w-full bg-white/10 border border-white/20 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Your Message"
                 ></textarea>
               </div>
-
-              {/* Status Pesan & Tombol Submit */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4">
-                {/* Notifikasi Status */}
-                <div className="text-sm font-semibold h-5">
-                  {status === "sending" && (
-                    <span className="text-blue-500 animate-pulse">
-                      Mengirim pesan...
-                    </span>
-                  )}
-                  {status === "success" && (
-                    <span className="text-green-500">
-                      ✅ Pesan berhasil dikirim!
-                    </span>
-                  )}
-                  {status === "error" && (
-                    <span className="text-red-500">
-                      ❌ Gagal mengirim pesan. Coba lagi.
-                    </span>
-                  )}
-                </div>
-
-                {/* Tombol Animasi Kustom Anda */}
-                <button
-                  type="submit"
-                  disabled={status === "sending"}
-                  className="cursor-pointer relative bg-blue-100 dark:bg-white/10 py-2 rounded-full min-w-[10rem] min-h-[3rem] group flex items-center justify-start hover:bg-blue-400 dark:hover:bg-blue-600 transition-all duration-[0.8s] ease-[cubic-bezier(0.510,0.026,0.368,1.016)] shadow-[inset_1px_2px_5px_rgba(0,0,0,0.5)] disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                  <div className="absolute flex px-1 py-0.5 justify-start items-center inset-0">
-                    <div className="w-[0%] group-hover:w-full transition-all duration-[1s] ease-[cubic-bezier(0.510,0.026,0.368,1.016)]"></div>
-                    <div className="rounded-full shrink-0 flex justify-center items-center shadow-[inset_1px_-1px_3px_0_black] h-full aspect-square bg-blue-300 dark:bg-blue-500 transition-all duration-[1s] ease-[cubic-bezier(0.510,0.026,0.368,1.016)] group-hover:bg-gray-900 dark:group-hover:bg-white">
-                      <div className="size-[0.8rem] text-gray-900 dark:text-white group-hover:text-white dark:group-hover:text-gray-900 group-hover:-rotate-30 transition-all duration-[2s] ease-[cubic-bezier(0.510,0.026,0.368,1.016)]">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 16 16"
-                          height="100%"
-                          width="100%"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M12.175 9H0V7H12.175L6.575 1.4L8 0L16 8L8 16L6.575 14.6L12.175 9Z"
-                          ></path>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="pl-[3.4rem] pr-[1.1rem] group-hover:pl-[1.1rem] group-hover:pr-[3.4rem] transition-all duration-[1s] ease-[cubic-bezier(0.510,0.026,0.368,1.016)] text-blue-800 dark:text-white group-hover:text-gray-900 dark:group-hover:text-white font-semibold">
-                    {status === "sending" ? "Sending..." : "Send Message"}
-                  </div>
-                </button>
-              </div>
+              <button
+                type="submit"
+                className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Send Message
+              </button>
             </form>
-          </div>
+          </div> */}
+        
         </div>
       </div>
     </section>
   );
 }
+
