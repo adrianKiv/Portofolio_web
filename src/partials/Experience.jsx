@@ -3,6 +3,13 @@ import React, { useState, useEffect, useRef } from "react";
 export default function Experience() {
   const experiences = [
     {
+      title: "Full-stack Developer Intern",
+      subtitle: "Diskominfo Jabar",
+      date: "Jan 2025 - Mei 2025",
+      detail:
+        "I worked as an intern at the Department of Communication and Informatics, where my primary responsibility was developing web applications using the Laravel 11 framework for frontend - backend components and Deploying. During my internship, I contributed to several internal projects, including the development of a digital library system for the Pojok Baca program. This system was designed to streamline the management of book collections as well as the borrowing and return processes for the public. In addition, I was involved in the improvement and optimization of the archiving module, focusing on enhancing the efficiency of document management and refining features such as search functionality and reporting. This experience gave me hands-on insight into information system development within a government environment and demonstrated how technology can be effectively utilized to support better and more transparent public services.",
+    },
+    {
       title: "Database System Practice Assistant",
       subtitle: "Universitas Pendidikan Indonesia",
       date: "Feb 2024 - Feb 2025",
@@ -22,13 +29,6 @@ export default function Experience() {
       date: "mei 2024 - Des 2024",
       detail:
         "I also contributed to the Assembler programming course by assisting students during coding and debugging sessions. These activities were conducted on a virtual reality-based platform that simulates virtual hardware, allowing students to better visualize how machine-level instructions interact with memory and processor components. I emphasized how using the right tools can significantly simplify complex low-level programming tasks and enhance the learning experience.",
-    },
-    {
-      title: "Web Developer Intern",
-      subtitle: "Diskominfo Jabar",
-      date: "Jan 2025 - Mei 2025",
-      detail:
-        "I worked as an intern at the Department of Communication and Informatics, where my primary responsibility was developing web applications using the Laravel 11 framework for both frontend and backend components. During my internship, I contributed to several internal projects, including the development of a digital library system for the Pojok Baca program. This system was designed to streamline the management of book collections as well as the borrowing and return processes for the public. In addition, I was involved in the improvement and optimization of the archiving module, focusing on enhancing the efficiency of document management and refining features such as search functionality and reporting. This experience gave me hands-on insight into information system development within a government environment and demonstrated how technology can be effectively utilized to support better and more transparent public services.",
     },
   ];
 
