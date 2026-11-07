@@ -1,31 +1,142 @@
-import React, { useState } from "react";
-import emailjs from "emailjs-com";
+import { createElement, useEffect, useRef, useState } from "react";
+import {
+  FaFacebook,
+  FaGithub,
+  FaInstagram,
+  FaLinkedin,
+  FaYoutube,
+} from "react-icons/fa";
+import {
+  FiArrowRight,
+  FiCheck,
+  FiCopy,
+  FiExternalLink,
+  FiMail,
+  FiMapPin,
+} from "react-icons/fi";
+
+const EMAIL = "adrianmulianto@gmail.com";
+
+const contactCards = [
+  {
+    label: "Professional Network",
+    title: "LinkedIn",
+    description:
+      "Connect with me professionally, check out my experience, and view recommendations.",
+    href: "https://www.linkedin.com/in/adrianmulianto/",
+    action: "Visit LinkedIn Profile",
+    icon: FaLinkedin,
+    iconClassName: "bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400",
+  },
+  {
+    label: "Code & Repositories",
+    title: "GitHub",
+    description:
+      "Explore my open-source projects, code samples, and contributions.",
+    href: "https://github.com/adrianKiv",
+    action: "Explore Repositories",
+    icon: FaGithub,
+    iconClassName: "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200",
+  },
+];
+
+const socialLinks = [
+  {
+    name: "Instagram",
+    href: "https://www.instagram.com/adriannn_027/",
+    icon: FaInstagram,
+    hoverClassName: "hover:text-pink-600 dark:hover:text-pink-400",
+  },
+  {
+    name: "Facebook",
+    href: "https://www.facebook.com/adrian.mulianto/",
+    icon: FaFacebook,
+    hoverClassName: "hover:text-blue-600 dark:hover:text-blue-400",
+  },
+  {
+    name: "YouTube",
+    href: "https://www.youtube.com/@adrian_2791",
+    icon: FaYoutube,
+    hoverClassName: "hover:text-red-600 dark:hover:text-red-400",
+  },
+];
+
+function ExternalLinkIcon() {
+  return <FiExternalLink className="w-4 h-4 ml-2" aria-hidden="true" />;
+}
+
+function ContactCard({
+  label,
+  title,
+  description,
+  href,
+  action,
+  icon,
+  iconClassName,
+}) {
+  return (
+    <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-lg border border-gray-100 dark:border-gray-700 flex flex-col justify-between transform transition duration-300 hover:-translate-y-1">
+      <div>
+        <div
+          className={`w-14 h-14 ${iconClassName} rounded-2xl flex items-center justify-center mb-6`}
+        >
+          {createElement(icon, { className: "w-7 h-7", "aria-hidden": true })}
+        </div>
+        <span className="text-xs font-semibold tracking-wider uppercase text-gray-400 dark:text-gray-500">
+          {label}
+        </span>
+        <h3 className="text-xl font-bold text-gray-900 dark:text-white mt-1 mb-2">
+          {title}
+        </h3>
+        <p className="text-gray-600 dark:text-gray-400 text-sm mb-6">
+          {description}
+        </p>
+      </div>
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center justify-center w-full px-5 py-3 rounded-xl bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white font-medium text-sm transition"
+      >
+        {action}
+        <ExternalLinkIcon />
+      </a>
+    </div>
+  );
+}
+
+function SocialLink({ name, href, icon, hoverClassName }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`p-3 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 ${hoverClassName} rounded-xl transition`}
+      title={name}
+      aria-label={name}
+    >
+      {createElement(icon, { className: "w-5 h-5", "aria-hidden": true })}
+    </a>
+  );
+}
 
 export default function Contact() {
-  const [status, setStatus] = useState(""); // '', 'sending', 'success', 'error'
+  const [copied, setCopied] = useState(false);
+  const copyTimeoutRef = useRef(null);
 
-  const sendEmail = (e) => {
-    e.preventDefault();
-    setStatus("sending");
+  useEffect(() => {
+    return () => window.clearTimeout(copyTimeoutRef.current);
+  }, []);
 
-    emailjs
-      .sendForm(
-        "service_2wxiroc",
-        "template_grhubn9",
-        e.target,
-        "yLfGyJRmr2cjFmQeU", // atau public key dari EmailJS
-      )
-      .then(() => {
-        setStatus("success");
-        e.target.reset();
-        // Sembunyikan pesan sukses setelah 5 detik
-        setTimeout(() => setStatus(""), 5000);
-      })
-      .catch((err) => {
-        console.error("Gagal mengirim:", err);
-        setStatus("error");
-        setTimeout(() => setStatus(""), 5000);
-      });
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      setCopied(true);
+      window.clearTimeout(copyTimeoutRef.current);
+      copyTimeoutRef.current = window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
   };
 
   return (
@@ -34,134 +145,105 @@ export default function Contact() {
       className="py-20 bg-gray-50 dark:bg-gray-900 transition-colors duration-300"
     >
       <div className="container mx-auto px-4 md:px-6 max-w-6xl">
-        {/* Header Section */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-700 mb-4">
+          <span className="inline-block py-1 px-3 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-semibold tracking-wider uppercase mb-3">
             Get In Touch
+          </span>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
+            Let&apos;s{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
+              Connect
+            </span>{" "}
+            &amp; Collaborate
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 text-lg">
-            Interested in working with me? Send a message and let's talk.
+          <p className="text-gray-600 dark:text-gray-400 text-base md:text-lg max-w-2xl mx-auto">
+            I am currently open to full-time opportunities, freelance projects,
+            or technical discussions. Feel free to reach out through any of the
+            platforms below!
           </p>
         </div>
 
-        {/* Card Container */}
-        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden flex flex-col lg:flex-row border border-gray-100 dark:border-gray-700">
-          {/* Sisi Kiri: Info Kontak (Gradien) */}
-          <div className="lg:w-2/5 bg-gradient-to-br from-blue-600 to-indigo-700 p-10 text-white flex flex-col justify-between">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-lg border border-blue-200 dark:border-blue-900/50 flex flex-col justify-between transform transition duration-300 hover:-translate-y-1 relative overflow-hidden">
             <div>
-              <h3 className="text-2xl font-bold mb-4">Contact Information</h3>
-              <p className="text-blue-100 mb-8 leading-relaxed">
-                {/* Fill up the form and I will get back to you within 24 hours. */}
-              </p>
-
-              <div className="space-y-6">
-                {/* Email Info */}
-                <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center shrink-0">
-                    <svg
-                      className="w-5 h-5 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                      />
-                    </svg>
-                  </div>
-                  <span className="font-medium">adrianmulianto@gmail.com</span>
-                </div>
-
-                {/* Location Info */}
-                <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center shrink-0">
-                    <svg
-                      className="w-5 h-5 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.242-4.243a8 8 0 1111.314 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                    </svg>
-                  </div>
-                  <span className="font-medium">
-                    Sukabumi, West Java - Indonesia
-                  </span>
-                </div>
+              <div className="w-14 h-14 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mb-6">
+                <FiMail className="w-7 h-7" aria-hidden="true" />
               </div>
+              <span className="text-xs font-semibold tracking-wider uppercase text-blue-600 dark:text-blue-400">
+                Primary Contact
+              </span>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mt-1 mb-2">
+                Direct Email
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300 text-sm mb-6 break-all font-mono bg-gray-50 dark:bg-gray-900/50 p-3 rounded-xl border border-gray-200 dark:border-gray-700">
+                {EMAIL}
+              </p>
             </div>
 
-            {/* Dekorasi Tambahan */}
-            {/* <div className="mt-12 opacity-20">
-              <svg className="w-32 h-32 absolute -bottom-6 -left-6 transform -rotate-12" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 13h-5v5h-2v-5h-5v-2h5v-5h2v5h5v2z"/>
-              </svg>
-            </div> */}
+            <div className="flex flex-col sm:flex-row gap-3 mt-4">
+              <a
+                href={`mailto:${EMAIL}`}
+                className="flex-1 inline-flex items-center justify-center px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition shadow-md text-sm"
+              >
+                <FiArrowRight className="w-4 h-4 mr-2" aria-hidden="true" />
+                Send Email
+              </a>
+              <button
+                type="button"
+                onClick={handleCopyEmail}
+                className="inline-flex items-center justify-center px-4 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium transition text-sm border border-gray-200 dark:border-gray-600 cursor-pointer"
+                title="Copy Email to Clipboard"
+              >
+                {copied ? (
+                  <>
+                    <FiCheck
+                      className="w-4 h-4 mr-2 text-green-500 dark:text-green-400"
+                      aria-hidden="true"
+                    />
+                    <span className="text-green-600 dark:text-green-400">
+                      Copied!
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <FiCopy className="w-4 h-4 mr-2" aria-hidden="true" />
+                    <span>Copy</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
 
-          {/* Sisi Kanan: Form Input */}
+          {contactCards.map((card) => (
+            <ContactCard key={card.title} {...card} />
+          ))}
+        </div>
 
-          {/* <div className="md:w-1/2">
-            <form className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-white">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  className="mt-1 block w-full bg-white/10 border border-white/20 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Your Name"
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-white">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="mt-1 block w-full bg-white/10 border border-white/20 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Your Email"
-                />
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-white">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  rows={4}
-                  className="mt-1 block w-full bg-white/10 border border-white/20 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Your Message"
-                ></textarea>
-              </div>
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Send Message
-              </button>
-            </form>
-          </div> */}
-        
+        <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-2xl flex items-center justify-center shrink-0">
+              <FiMapPin className="w-6 h-6" aria-hidden="true" />
+            </div>
+            <div>
+              <h4 className="text-base font-bold text-gray-900 dark:text-white">
+                Location
+              </h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Sukabumi, West Java - Indonesia
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-3">
+            <span className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider mr-2 hidden sm:inline-block">
+              Socials:
+            </span>
+            {socialLinks.map((social) => (
+              <SocialLink key={social.name} {...social} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
   );
 }
-
