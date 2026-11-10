@@ -15,9 +15,9 @@ function Header() {
   const [typingSpeed, setTypingSpeed] = useState(150);
 
   const words = [
-    "Full-stack Developer.",
+    "Software Engineer.",
     "Backend Developer.",
-    "Frontend Developer.",
+    "Full-stack Web Developer.",
   ];
 
   useEffect(() => {
