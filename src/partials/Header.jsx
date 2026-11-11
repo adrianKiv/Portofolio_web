@@ -1,6 +1,7 @@
 import GBRLOGO from "../assets/images/logo.png";
 import CVyan from "/CV_Adrian_Mulianto.pdf";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { InkTransition } from "../utils/inkBleed/inkTransition.js";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
 import Fotolulus from "../assets/images/fotolulus.jpeg";
@@ -52,6 +53,8 @@ function Header() {
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const toggleBtnRef = useRef(null);
+  const inkTransitionRef = useRef(null);
 
   const [DarkMode, setDarkMode] = useState(() => {
     if (typeof window !== "undefined") {
@@ -64,11 +67,33 @@ function Header() {
   });
 
   useEffect(() => {
+    let canvas = document.querySelector(".ink-canvas");
+    if (!canvas) {
+      canvas = document.createElement("canvas");
+      canvas.className = "ink-canvas";
+      canvas.setAttribute("aria-hidden", "true");
+      canvas.setAttribute("data-html2canvas-ignore", "");
+      document.body.append(canvas);
+    }
+
+    const ink = new InkTransition(canvas, toggleBtnRef.current, {
+      onThemeChange: (isDark) => setDarkMode(isDark),
+    });
+    inkTransitionRef.current = ink;
+
+    return () => {
+      ink.destroy();
+    };
+  }, []);
+
+  useEffect(() => {
     if (DarkMode) {
       document.documentElement.classList.add("dark");
+      document.documentElement.dataset.theme = "dark";
       localStorage.setItem("theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
+      document.documentElement.dataset.theme = "light";
       localStorage.setItem("theme", "light");
     }
 
@@ -76,8 +101,17 @@ function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [DarkMode]);
-
-  const toggleDarkMode = () => setDarkMode(!DarkMode);
+  const toggleDarkMode = (e) => {
+    if (inkTransitionRef.current) {
+      const clickPoint =
+        e && typeof e.clientX === "number" && (e.clientX !== 0 || e.clientY !== 0)
+          ? { x: e.clientX, y: e.clientY }
+          : undefined;
+      inkTransitionRef.current.toggle(clickPoint);
+    } else {
+      setDarkMode(!DarkMode);
+    }
+  };
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
   const navLinks = [
@@ -130,6 +164,8 @@ function Header() {
             {/* Right Controls */}
             <div className="flex items-center space-x-4">
               <button
+                ref={toggleBtnRef}
+                data-ink-live
                 onClick={toggleDarkMode}
                 className="p-2 rounded-full bg-gray-500 dark:bg-gray-500 text-gray-950 dark:text-yellow-400 hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors"
               >

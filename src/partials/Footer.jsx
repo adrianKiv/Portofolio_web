@@ -1,11 +1,4 @@
 import GBRLOGO from "../assets/images/logo.png";
-import {
-  FaFacebook,
-  FaGithub,
-  FaInstagram,
-  FaLinkedin,
-  FaEnvelope,
-} from "react-icons/fa";
 
 function Footer() {
   return (
@@ -48,65 +41,6 @@ function Footer() {
               </a>
               .
             </span>
-            <ul className="flex justify-center mt-5 space-x-5">
-              {/* Facebook */}
-              <li>
-                <a
-                  href="https://www.facebook.com/adrian.mulianto/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-500 hover:text-gray-900 dark:hover:text-white dark:text-gray-400"
-                >
-                  <FaFacebook className="w-5 h-5" />
-                </a>
-              </li>
-
-              {/* Instagram */}
-              <li>
-                <a
-                  href="https://www.instagram.com/adriannn_027/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-500 hover:text-gray-900 dark:hover:text-white dark:text-gray-400"
-                >
-                  <FaInstagram className="w-5 h-5" />
-                </a>
-              </li>
-
-              {/* Email */}
-              <li>
-                <a
-                  href="mailto:adrianmulianto@gmail.com"
-                  className="text-gray-500 hover:text-gray-900 dark:hover:text-white dark:text-gray-400"
-                >
-                  <FaEnvelope className="w-5 h-5" />
-                </a>
-              </li>
-
-              {/* GitHub */}
-              <li>
-                <a
-                  href="https://github.com/adrianKiv"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-500 hover:text-gray-900 dark:hover:text-white dark:text-gray-400"
-                >
-                  <FaGithub className="w-5 h-5" />
-                </a>
-              </li>
-
-              {/* LinkedIn */}
-              <li>
-                <a
-                  href="https://www.linkedin.com/in/adrianmulianto/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-500 hover:text-gray-900 dark:hover:text-white dark:text-gray-400"
-                >
-                  <FaLinkedin className="w-5 h-5" />
-                </a>
-              </li>
-            </ul>
           </div>
         </div>
       </footer>
