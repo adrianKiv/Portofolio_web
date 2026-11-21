@@ -1,47 +1,38 @@
-import GBRLOGO from "../assets/images/logo.png";
 import CVyan from "/CV_Adrian_Mulianto.pdf";
-import { useEffect, useState, useRef } from "react";
-import { InkTransition } from "../utils/inkBleed/inkTransition.js";
-import { FiSun, FiMoon } from "react-icons/fi";
+import { useEffect, useState } from "react";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
-import Fotolulus from "../assets/images/fotolulus.jpeg";
-import Fotocandi from "../assets/images/fotocandi.JPG";
+import { FiArrowDownRight, FiDownload } from "react-icons/fi";
 import Fotowis from "../assets/images/fotowis.jpeg";
 
+const words = [
+  "Software Engineer.",
+  "Backend Developer.",
+  "Full-stack Web Developer.",
+];
+
 function Header() {
-  // --- STATE UNTUK ANIMASI KETIK (TYPING EFFECT) ---
   const [text, setText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopNum, setLoopNum] = useState(0);
-  const [typingSpeed, setTypingSpeed] = useState(150);
-
-  const words = [
-    "Software Engineer.",
-    "Backend Developer.",
-    "Full-stack Web Developer.",
-  ];
-
+  const [typingSpeed, setTypingSpeed] = useState(130);
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   useEffect(() => {
+    document.documentElement.classList.add("dark");
+    document.documentElement.dataset.theme = "dark";
+
     const handleTyping = () => {
       const i = loopNum % words.length;
       const fullText = words[i];
-
-      // Tentukan apakah sedang menambah atau mengurangi huruf
       setText(
         isDeleting
           ? fullText.substring(0, text.length - 1)
           : fullText.substring(0, text.length + 1),
       );
-
-      // Atur kecepatan (mengetik lebih lambat, menghapus lebih cepat)
       setTypingSpeed(isDeleting ? 50 : 150);
-
-      // Jika kata sudah selesai diketik, beri jeda sebelum menghapus
       if (!isDeleting && text === fullText) {
         setTimeout(() => setIsDeleting(true), 1500);
-      }
-      // Jika kata sudah selesai dihapus, lanjut ke kata berikutnya
-      else if (isDeleting && text === "") {
+      } else if (isDeleting && text === "") {
         setIsDeleting(false);
         setLoopNum(loopNum + 1);
       }
@@ -51,67 +42,12 @@ function Header() {
     return () => clearTimeout(timer);
   }, [text, isDeleting, loopNum, typingSpeed]);
 
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const toggleBtnRef = useRef(null);
-  const inkTransitionRef = useRef(null);
-
-  const [DarkMode, setDarkMode] = useState(() => {
-    if (typeof window !== "undefined") {
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme) {
-        return savedTheme === "dark";
-      }
-    }
-    return true;
-  });
-
   useEffect(() => {
-    let canvas = document.querySelector(".ink-canvas");
-    if (!canvas) {
-      canvas = document.createElement("canvas");
-      canvas.className = "ink-canvas";
-      canvas.setAttribute("aria-hidden", "true");
-      canvas.setAttribute("data-html2canvas-ignore", "");
-      document.body.append(canvas);
-    }
-
-    const ink = new InkTransition(canvas, toggleBtnRef.current, {
-      onThemeChange: (isDark) => setDarkMode(isDark),
-    });
-    inkTransitionRef.current = ink;
-
-    return () => {
-      ink.destroy();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (DarkMode) {
-      document.documentElement.classList.add("dark");
-      document.documentElement.dataset.theme = "dark";
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      document.documentElement.dataset.theme = "light";
-      localStorage.setItem("theme", "light");
-    }
-
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [DarkMode]);
-  const toggleDarkMode = (e) => {
-    if (inkTransitionRef.current) {
-      const clickPoint =
-        e && typeof e.clientX === "number" && (e.clientX !== 0 || e.clientY !== 0)
-          ? { x: e.clientX, y: e.clientY }
-          : undefined;
-      inkTransitionRef.current.toggle(clickPoint);
-    } else {
-      setDarkMode(!DarkMode);
-    }
-  };
+  }, []);
+
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
   const navLinks = [
@@ -123,80 +59,57 @@ function Header() {
   ];
 
   return (
-    <div className="bg-white min-h-[80vh] relative overflow-hidden dark:bg-gray-900">
+    <header id="about" className="relative min-h-[92vh] overflow-hidden bg-[#080c14] text-white">
+      <div className="absolute inset-0 opacity-30" aria-hidden="true">
+        <div className="absolute -left-32 top-24 h-96 w-96 rounded-full bg-blue-700/30 blur-[120px]" />
+        <div className="absolute right-[-10rem] bottom-[-12rem] h-[32rem] w-[32rem] rounded-full bg-indigo-700/20 blur-[140px]" />
+      </div>
       <nav
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-md"
-            : "bg-transparent"
+        className={`fixed top-0 z-50 w-full transition-all duration-300 ${
+          scrolled ? "border-b border-white/5 bg-[#080c14]/90 backdrop-blur-xl" : "bg-transparent"
         }`}
       >
-        <div className="mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 relative">
-            <a href="#" className="flex items-center space-x-2">
-              <img
-                src={GBRLOGO}
-                alt="logo"
-                className="h-14 w-auto dark:invert"
-              />
-              <span className="font-pressstart text-2xl tracking-wide text-sky-600 dark:text-sky-300">
-                ADRIAN
+        <div className="mx-auto max-w-7xl px-5 sm:px-8">
+          <div className="flex h-20 items-center justify-between">
+            <a href="#" className="group flex items-center gap-3">
+              <span className="grid h-9 w-9 place-items-center rounded-full border border-blue-400/40 bg-blue-500/10 font-pressstart text-[10px] text-blue-300">
+                AM
               </span>
+              <span className="text-sm font-bold tracking-[0.22em] text-white">ADRIAN</span>
             </a>
-
-            {/* Desktop Nav */}
-            <div className="hidden lg:flex space-x-6 absolute left-1/2 transform -translate-x-1/2">
+            <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-7 lg:flex">
               {navLinks.map((link, index) => (
                 <a
                   key={index}
                   href={link.href}
-                  className={`px-3 py-2 font-bold text-[18px] rounded-md transition-colors duration-300 ${
-                    scrolled
-                      ? "text-blue-900 hover:text-blue-600 dark:text-blue-300 dark:hover:text-blue-100"
-                      : "text-blue-800 hover:text-blue-400 dark:text-gray-300 dark:hover:text-blue-700"
-                  }`}
+                  className="text-sm font-medium text-slate-400 transition hover:text-white"
                 >
                   {link.text}
                 </a>
               ))}
             </div>
-
-            {/* Right Controls */}
-            <div className="flex items-center space-x-4">
-              <button
-                ref={toggleBtnRef}
-                data-ink-live
-                onClick={toggleDarkMode}
-                className="p-2 rounded-full bg-gray-500 dark:bg-gray-500 text-gray-950 dark:text-yellow-400 hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors"
-              >
-                {DarkMode ? <FiSun size={26} /> : <FiMoon size={26} />}
-              </button>
-
-              {/* Hamburger for Mobile */}
-              <div className="lg:hidden">
-                <button
-                  onClick={toggleMobileMenu}
-                  className="p-2 text-gray-700 dark:text-gray-300"
-                >
-                  {mobileMenuOpen ? (
-                    <HiOutlineX size={28} />
-                  ) : (
-                    <HiOutlineMenuAlt3 size={28} />
-                  )}
-                </button>
-              </div>
-            </div>
+            <a
+              href="#contact"
+              className="hidden items-center gap-2 rounded-full border border-blue-400/30 bg-blue-500/10 px-4 py-2 text-xs font-bold text-blue-300 transition hover:border-blue-400/60 hover:bg-blue-500/20 sm:flex"
+            >
+              Let's talk <FiArrowDownRight />
+            </a>
+            <button
+              onClick={toggleMobileMenu}
+              className="p-2 text-slate-300 lg:hidden"
+              aria-label="Toggle navigation"
+            >
+              {mobileMenuOpen ? <HiOutlineX size={26} /> : <HiOutlineMenuAlt3 size={26} />}
+            </button>
           </div>
         </div>
-
-        {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden px-4 pb-4 bg-white dark:bg-gray-900 space-y-2">
+          <div className="border-t border-white/5 bg-[#080c14]/95 px-5 py-5 lg:hidden">
             {navLinks.map((link, index) => (
               <a
                 key={index}
                 href={link.href}
-                className="block px-3 py-2 rounded-md text-base font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                className="block border-b border-white/5 py-3 text-sm font-medium text-slate-300"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {link.text}
@@ -205,78 +118,50 @@ function Header() {
           </div>
         )}
       </nav>
-
-      {/* Hero Content - Padding bawah (pb) diperbesar agar animasi tidak terpotong */}
-      <div className="pt-32 pb-28 lg:pb-24 relative z-0">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-12 items-center">
-            {/* Bagian Kiri (Teks & Tombol) */}
-            <div className="mb-16 lg:mb-8 text-center lg:text-left flex flex-col items-center lg:items-start">
-              <h1 className="text-3xl sm:text-5xl lg:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-gray-600 to-gray-400 dark:from-sky-300 dark:to-sky-100">
-                Hi, my name is <br />
-              </h1>
-              <span className="font-eduVIC text-transparent text-6xl font-bold bg-gradient-to-r bg-clip-text from-gray-600 to-gray-400 dark:from-sky-400 dark:to-sky-200 mt-2 block">
-                Adrian Mulianto
-              </span>
-              <p className="mt-6 text-base sm:text-lg text-black dark:text-gray-300 max-w-lg leading-relaxed min-h-[120px] md:min-h-[100px]">
-                Computer Science graduate from Universitas Pendidikan Indonesia
-                and Software Engineer specializing in
-                {/* Membuat efek ketik selalu berada di baris baru agar tidak tumpang tindih */}
-                <span className="relative block w-fit mx-auto lg:mx-0 mt-2 group cursor-default">
-                  {/* Efek Cahaya (Glow) di belakang teks yang berdenyut */}
-                  <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-sky-400 blur-md opacity-40 group-hover:opacity-80 animate-pulse transition-opacity duration-500"></span>
-
-                  {/* Teks Utama dengan warna gradien biru dan Kursor */}
-                  {/* Mengatur ukuran teks responsif: text-2xl di mobile, text-3xl di layar agak besar */}
-                  <span className="relative font-extrabold whitespace-nowrap text-2xl sm:text-3xl">
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-sky-500 dark:from-blue-400 dark:to-sky-300">
-                      {text}
-                    </span>
-                    <span className="text-blue-600 dark:text-sky-400 animate-pulse font-light ml-1">
-                      |
-                    </span>
-                  </span>
-                </span>
+      <div className="relative z-10 mx-auto flex min-h-[92vh] max-w-7xl items-center px-5 pb-12 pt-28 sm:px-8">
+        <div className="grid w-full items-center gap-12 lg:grid-cols-[1.15fr_.85fr]">
+          <div className="hero-copy-in">
+            <div className="section-kicker mb-7">Portfolio / 2026</div>
+            <h1 className="max-w-4xl text-[clamp(3.2rem,8vw,7.2rem)] font-black leading-[0.88] tracking-[-0.055em] text-white">
+              Adrian
+              <span className="block text-blue-500">Mulianto.</span>
+            </h1>
+            <div className="mt-7 flex min-h-10 items-center gap-3 border-l border-blue-500/60 pl-4">
+              <p className="text-base font-semibold text-slate-300 sm:text-xl">
+                Computer Science graduate &nbsp;—&nbsp;
+                <span className="text-blue-400">{text}<span className="animate-pulse">|</span></span>
               </p>
-
-              <div className="mt-8">
-                <a
-                  href={CVyan}
-                  target="_blank"
-                  className="cursor-pointer uppercase bg-gray-200 dark:bg-gray-500 px-4 py-2 active:translate-x-0.5 active:translate-y-0.5 hover:shadow-[0.5rem_0.5rem_#F44336,-0.5rem_-0.5rem_#00BCD4] transition inline-block text-gray-900 dark:text-white font-bold"
-                >
-                  Download CV!
-                </a>
-              </div>
             </div>
-
-            {/* Bagian Kanan (Gambar dengan Animasi Lapis 3D) - Margin bawah (mb-10) ditambahkan untuk mobile */}
-            <div className="relative w-full max-w-xs sm:max-w-sm mx-auto aspect-[4/5] z-10 group mt-8 lg:mt-0 mb-10 lg:mb-0">
-              {/* Layer Belakang: Aura Blur Statis */}
-              <div className="absolute inset-0 bg-gradient-to-r from-sky-400 to-indigo-500 rounded-2xl blur-2xl opacity-20 dark:opacity-40 z-0"></div>
-
-              {/* Layer 1: Cincin Putus-putus (Berputar searah jarum jam di belakang gambar) */}
-              <div className="absolute -inset-6 border-[2px] border-dashed border-sky-400/40 dark:border-sky-300/30 rounded-[2.5rem] animate-[spin_12s_linear_infinite] z-0 pointer-events-none"></div>
-
-              {/* Layer 2: Cincin Solid (Berputar berlawanan jarum jam di depan bingkai utama) */}
-              <div className="absolute -inset-6 border-[2px] border-dashed border-sky-400/40 dark:border-sky-300/30 rounded-[2.5rem] animate-[spin_12s_linear_infinite_reverse] z-0 pointer-events-none"></div>
-
-              {/* Layer Utama: Wadah Gambar */}
-              <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl z-10 bg-gray-200 dark:bg-gray-800 border-[1px] border-gray-300 dark:border-gray-700">
-                <img
-                  src={Fotowis}
-                  alt="Foto wis"
-                  className="object-cover w-full h-full transition-transform duration-700 ease-in-out group-hover:scale-110"
-                />
-
-                {/* Layer 3: Efek Cahaya Lewat di Depan Gambar (Sweep menyilang) */}
-                <div className="absolute top-0 -left-[150%] w-[100%] h-full z-30 transform -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:left-[150%] transition-all duration-1000 ease-in-out pointer-events-none"></div>
+            <p className="mt-6 max-w-xl text-sm leading-7 text-slate-400 sm:text-base">
+              I build practical digital products across web and mobile, with a focus on clean architecture,
+              useful interfaces, and reliable backend systems.
+            </p>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <a href="#projects" className="inline-flex items-center gap-3 rounded-full bg-blue-600 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-blue-500 hover:shadow-[0_12px_40px_rgba(37,99,235,.28)]">
+                Explore work <FiArrowDownRight className="text-lg" />
+              </a>
+              <a href={CVyan} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.03] px-6 py-3.5 text-sm font-bold text-slate-200 transition hover:border-blue-400/40 hover:bg-blue-500/10">
+                <FiDownload /> Download CV
+              </a>
+            </div>
+          </div>
+          <div className="hero-image-in relative mx-auto w-full max-w-[430px]">
+            <div className="absolute -inset-5 rounded-[2.5rem] border border-blue-400/10" />
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/10 bg-[#101827] blue-glow">
+              <img src={Fotowis} alt="Adrian Mulianto" className="h-full w-full object-cover grayscale-[12%]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#080c14] via-transparent to-blue-500/5" />
+              <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-blue-300">Based in</p>
+                  <p className="mt-1 text-sm font-semibold text-white">Sukabumi, Indonesia</p>
+                </div>
+                <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_16px_#34d399]" />
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 }
 

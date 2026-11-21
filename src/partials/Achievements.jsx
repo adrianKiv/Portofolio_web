@@ -9,17 +9,16 @@ export default function Achievements() {
   useEffect(() => {
     const controller = new AbortController();
 
-    fetch("https://go-porto-api.vercel.app/api/ac", {
-      signal: controller.signal,
-    })
-      .then((response) => {
+    Promise.all([
+      fetch("https://go-porto-api.vercel.app/api/ac", { signal: controller.signal }).then((response) => {
         if (!response.ok) throw new Error("Gagal mengambil data pencapaian");
         return response.json();
-      })
-      .then((result) => {
-        const data = Array.isArray(result.data) ? result.data : [];
+      }),
+      new Promise((resolve) => window.setTimeout(resolve, 900)),
+    ])
+      .then(([result]) => {
         setAchiv(
-          data.map((item) => ({
+          (Array.isArray(result.data) ? result.data : []).map((item) => ({
             id: item.ID,
             type: item.type,
             title: item.title,
@@ -30,9 +29,7 @@ export default function Achievements() {
         );
       })
       .catch((fetchError) => {
-        if (fetchError.name !== "AbortError") {
-          setError(fetchError.message);
-        }
+        if (fetchError.name !== "AbortError") setError(fetchError.message);
       })
       .finally(() => setLoading(false));
 
@@ -41,156 +38,85 @@ export default function Achievements() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // Saat kartu MASUK ke dalam layar
-            entry.target.classList.remove("opacity-0", "translate-y-12");
-            entry.target.classList.add("opacity-100", "translate-y-0");
-          } else {
-            // Saat kartu KELUAR dari layar (kembalikan ke posisi awal)
-            entry.target.classList.remove("opacity-100", "translate-y-0");
-            entry.target.classList.add("opacity-0", "translate-y-12");
-          }
-        });
-      },
-      {
-        threshold: 0.1, // Terpicu ketika 10% kartu terlihat atau hilang
-        rootMargin: "0px", // Direset ke 0 agar animasi keluar terpicu tepat saat kartu keluar batas layar
-      },
+      (entries) => entries.forEach((entry) => {
+        entry.target.setAttribute(
+          "data-visible",
+          entry.isIntersecting ? "true" : "false",
+        );
+      }),
+      { threshold: 0.12 },
     );
-
-    cardsRef.current.forEach((card) => {
-      if (card) observer.observe(card);
-    });
-
-    const cards = [...cardsRef.current];
-    return () => {
-      cards.forEach((card) => {
-        if (card) observer.unobserve(card);
-      });
-    };
+    const cards = cardsRef.current.filter(Boolean);
+    cards.forEach((card) => observer.observe(card));
+    return () => cards.forEach((card) => observer.unobserve(card));
   }, [achiv]);
 
   return (
-    <section
-      id="achievements"
-      className="py-20 bg-gray-50 dark:bg-gray-900 transition-colors duration-300 overflow-hidden"
-    >
-      <div className="container mx-auto px-4 md:px-6 max-w-6xl">
-        {/* Header Section */}
-        <div className="text-center mb-16 max-w-2xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-700 mb-4">
-            Achievements & Certifications
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 text-lg">
-            A showcase of my academic milestones, technical certifications, and
-            professional recognitions.
+    <section id="achievements" className="site-section border-y border-white/5 py-24">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div>
+            <span className="section-kicker">03 / Recognition</span>
+            <h2 className="mt-5 text-4xl font-black tracking-tight text-white sm:text-6xl">
+              Achievements
+            </h2>
+          </div>
+          <p className="max-w-md text-sm leading-7 text-slate-400">
+            Academic milestones and professional certifications that shaped my technical foundation.
           </p>
         </div>
 
-        {/* Grid Layout */}
         {loading && (
-          <p className="text-center text-gray-500 dark:text-gray-400">
-            Memuat pencapaian...
-          </p>
+          <div className="api-loading-wrap" role="status" aria-live="polite">
+            <div className="api-loading">
+              <span className="api-loading-spinner" aria-hidden="true" />
+              <div>
+                <p>Sedang mengambil data dari GO API</p>
+                <span>Menyiapkan pencapaian</span>
+              </div>
+            </div>
+            <div className="achievement-skeleton">
+              {[0, 1, 2, 3].map((item) => (
+                <div key={item} className="achievement-skeleton-card">
+                  <div><span /><i /></div>
+                  <b /><i /><i /><span />
+                </div>
+              ))}
+            </div>
+          </div>
         )}
-        {error && (
-          <p className="text-center text-red-500">
-            {error}
-          </p>
-        )}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {error && <p className="text-sm text-red-400">{error}</p>}
+
+        <div className="grid gap-5 md:grid-cols-2">
           {achiv.map((item, index) => (
-            <div
+            <article
               key={item.id ?? index}
               ref={(el) => (cardsRef.current[index] = el)}
-              // Class animasi: transisi memakan waktu 700ms
-              className="opacity-0 translate-y-12 transition-all duration-700 ease-out bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm hover:shadow-xl transform hover:-translate-y-2 border border-gray-100 dark:border-gray-700 flex flex-col group"
+              data-visible="false"
+              style={{ transitionDelay: `${index * 90}ms` }}
+              className="group min-h-[300px] rounded-2xl border border-white/8 bg-[#0b111d] p-7 transition-all duration-700 data-[visible=false]:translate-y-12 data-[visible=false]:opacity-0 data-[visible=true]:translate-y-0 data-[visible=true]:opacity-100 sm:p-9"
             >
-              <div className="flex justify-between items-start mb-4">
-                {/* Ikon dan Kategori */}
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`p-3 rounded-xl transition-colors ${item.type === "Achievement" ? "bg-yellow-50 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400 group-hover:bg-yellow-100 dark:group-hover:bg-yellow-900/50" : "bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50"}`}
-                  >
-                    {item.type === "Achievement" ? (
-                      <svg
-                        className="w-6 h-6 transform group-hover:scale-110 transition-transform"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        className="w-6 h-6 transform group-hover:scale-110 transition-transform"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-                        />
-                      </svg>
-                    )}
-                  </div>
-                  <span
-                    className={`text-xs font-bold uppercase tracking-wider ${item.type === "Achievement" ? "text-yellow-600 dark:text-yellow-400" : "text-blue-600 dark:text-blue-400"}`}
-                  >
-                    {item.type}
-                  </span>
-                </div>
-
-                {/* Tanggal */}
-                <span className="text-sm font-semibold text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-700/50 px-3 py-1 rounded-full">
-                  {item.date}
+              <div className="flex items-start justify-between gap-4">
+                <span className="rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-blue-300">
+                  {item.type}
                 </span>
+                <span className="text-xs font-semibold text-slate-500">{item.date}</span>
               </div>
-
-              {/* Judul & Penerbit */}
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              <h3 className="mt-8 max-w-xl text-xl font-bold text-white transition group-hover:text-blue-300 sm:text-2xl">
                 {item.title}
               </h3>
-              {/* Deskripsi */}
-              <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed flex-grow mb-6">
-                {item.description}
-              </p>
-
-              {/* Tautan Sertifikat */}
-              <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-700">
+              <p className="mt-4 text-sm leading-7 text-slate-400">{item.description}</p>
+              {item.link && (
                 <a
                   href={item.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center text-sm font-bold text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  className="mt-7 inline-flex text-xs font-bold uppercase tracking-wider text-blue-400 transition hover:text-blue-300"
                 >
-                  View Credentials
-                  <svg
-                    className="w-4 h-4 ml-1.5 transform group-hover:translate-x-1 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
-                  </svg>
+                  View credential →
                 </a>
-              </div>
-            </div>
+              )}
+            </article>
           ))}
         </div>
       </div>

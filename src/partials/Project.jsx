@@ -1,26 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
+import { FaGithub, FaLinkedin, FaYoutube } from "react-icons/fa";
+
 export default function Project() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const cardsRef = useRef([]);
-  // State untuk mengontrol pop-up modal detail proyek
   const [selectedProject, setSelectedProject] = useState(null);
+  const cardsRef = useRef([]);
 
   useEffect(() => {
     const controller = new AbortController();
 
-    fetch("https://go-porto-api.vercel.app/api/featured-projects", {
-      signal: controller.signal,
-    })
-      .then((response) => {
+    Promise.all([
+      fetch("https://go-porto-api.vercel.app/api/featured-projects", { signal: controller.signal }).then((response) => {
         if (!response.ok) throw new Error("Gagal mengambil data proyek");
         return response.json();
-      })
-      .then((result) => {
-        const data = Array.isArray(result.data) ? result.data : [];
+      }),
+      new Promise((resolve) => window.setTimeout(resolve, 900)),
+    ])
+      .then(([result]) => {
         setProjects(
-          data.map((item) => ({
+          (Array.isArray(result.data) ? result.data : []).map((item) => ({
             id: item.ID,
             title: item.title,
             subtitle: item.subtitle,
@@ -33,9 +33,7 @@ export default function Project() {
         );
       })
       .catch((fetchError) => {
-        if (fetchError.name !== "AbortError") {
-          setError(fetchError.message);
-        }
+        if (fetchError.name !== "AbortError") setError(fetchError.message);
       })
       .finally(() => setLoading(false));
 
@@ -43,284 +41,147 @@ export default function Project() {
   }, []);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.remove("opacity-0", "translate-y-12");
-            entry.target.classList.add("opacity-100", "translate-y-0");
-          } else {
-            entry.target.classList.remove("opacity-100", "translate-y-0");
-            entry.target.classList.add("opacity-0", "translate-y-12");
-          }
-        });
-      },
-      {
-        threshold: 0.1,
-        rootMargin: "0px",
-      }
-    );
-
-    cardsRef.current.forEach((card) => {
-      if (card) observer.observe(card);
-    });
-
-    const cards = [...cardsRef.current];
-    return () => {
-      cards.forEach((card) => {
-        if (card) observer.unobserve(card);
-      });
-    };
-  }, [projects]);
-
-  // Mencegah scroll pada body saat modal terbuka
-  useEffect(() => {
-    if (selectedProject) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    document.body.style.overflow = selectedProject ? "hidden" : "auto";
     return () => {
       document.body.style.overflow = "auto";
     };
   }, [selectedProject]);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        entry.target.setAttribute("data-visible", entry.isIntersecting ? "true" : "false");
+      }),
+      { threshold: 0.12 },
+    );
+    const cards = cardsRef.current.filter(Boolean);
+    cards.forEach((card) => observer.observe(card));
+    return () => cards.forEach((card) => observer.unobserve(card));
+  }, [projects]);
+
   return (
-    <section id="projects" className="py-20 bg-white dark:bg-gray-900 overflow-hidden relative">
-      <div className="container mx-auto px-4 md:px-6 max-w-7xl">
-        
-        {/* Header Section */}
-        <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-700 mb-4">
-            Featured Projects
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
-            Here are some of my projects that I have worked on, both
-            individually and in teams. I have more than 20+ projects that aren't
-            listed here; you can check them on my
-            <a
-              href="https://github.com/adrianKiv"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 dark:text-blue-400 hover:underline font-semibold mx-1"
-            >
-              GitHub
-            </a>
-            and
-            <a
-              href="https://www.linkedin.com/in/adrianmulianto"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 dark:text-blue-400 hover:underline font-semibold mx-1"
-            >
-              LinkedIn
-            </a>
-            profiles.
-          </p>
+    <section id="projects" className="site-section py-24">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div>
+            <span className="section-kicker">04 / Selected work</span>
+            <h2 className="mt-5 text-4xl font-black tracking-tight text-white sm:text-6xl">
+              Featured Projects
+            </h2>
+          </div>
+          <div className="flex gap-5 text-sm">
+            <a href="https://github.com/adrianKiv" target="_blank" rel="noopener noreferrer" className="text-slate-400 transition hover:text-blue-400">GitHub ↗</a>
+            <a href="https://www.linkedin.com/in/adrianmulianto" target="_blank" rel="noopener noreferrer" className="text-slate-400 transition hover:text-blue-400">LinkedIn ↗</a>
+          </div>
         </div>
 
         {loading && (
-          <p className="text-center text-gray-500 dark:text-gray-300">
-            Memuat proyek...
-          </p>
+          <div className="api-loading-wrap" role="status" aria-live="polite">
+            <div className="api-loading">
+              <span className="api-loading-spinner" aria-hidden="true" />
+              <div>
+                <p>Sedang mengambil data dari GO API</p>
+                <span>Menyiapkan proyek unggulan</span>
+              </div>
+            </div>
+            <div className="project-skeleton">
+              {[0, 1, 2].map((item) => (
+                <div key={item} className={`project-skeleton-card ${item === 0 ? "is-featured" : ""}`}>
+                  <i /><div><b /><span /><span /></div>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
-        {error && (
-          <p className="text-center text-red-500">
-            {error}
-          </p>
-        )}
+        {error && <p className="text-sm text-red-400">{error}</p>}
 
-        {/* Grid Card Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
+        <div className="grid gap-5 md:grid-cols-2">
           {projects.map((project, index) => (
-            <div
+            <article
               key={project.id ?? index}
               ref={(el) => (cardsRef.current[index] = el)}
-              className="opacity-0 translate-y-12 transition-all duration-700 ease-out bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transform hover:-translate-y-2 flex flex-col border border-gray-100 dark:border-gray-700 group"
+              data-visible="false"
+              className={`reveal-${index % 2 === 0 ? "left" : "right"} group overflow-hidden rounded-3xl border border-white/8 bg-[#0b111d] transition duration-500 hover:-translate-y-1 hover:border-blue-400/25 ${index === 0 ? "md:col-span-2" : ""}`}
             >
-              {/* Gambar Proyek */}
-              <div 
-                className="relative w-full h-48 md:h-56 overflow-hidden bg-gray-100 dark:bg-gray-700 cursor-pointer"
+              <button
+                type="button"
                 onClick={() => setSelectedProject(project)}
+                className="block w-full text-left"
               >
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                  {/* Ikon Zoom saat di-hover */}
-                  <svg className="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-50 group-hover:scale-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
+                <div className={`relative overflow-hidden bg-slate-900 ${index === 0 ? "h-72 sm:h-[440px]" : "h-64 sm:h-72"}`}>
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#080c14] via-transparent to-transparent opacity-80" />
                 </div>
-              </div>
-
-              {/* Konten Kartu */}
-              <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                  {project.title.replace(/^\d+\.\s*/, "")}
-                </h3>
-
-                {/* Badge Teknologi */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.subtitle.split(",").map((tech, i) => (
-                    <span
-                      key={i}
-                      className="px-3 py-1 text-xs font-semibold text-blue-700 bg-blue-50 dark:text-blue-300 dark:bg-blue-900/40 rounded-full whitespace-nowrap"
-                    >
+              </button>
+              <div className="p-6 sm:p-8">
+                <div className="flex flex-wrap gap-2 rounded-xl border border-blue-400/10 bg-blue-500/[0.035] p-3">
+                  {project.subtitle.split(",").map((tech) => (
+                    <span key={tech} className="rounded-md border border-white/8 bg-[#111827] px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-blue-300">
                       {tech.trim().replace(/^&\s*/, "")}
                     </span>
                   ))}
                 </div>
-
-                {/* Deskripsi Proyek (Dibatasi 3 baris) */}
-                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-3 flex-grow">
+                <h3 className="mt-4 text-xl font-bold text-white sm:text-2xl">
+                  {project.title.replace(/^\d+\.\s*/, "")}
+                </h3>
+                <p className="mt-3 line-clamp-2 text-sm leading-7 text-slate-400">
                   {project.detail}
                 </p>
-
-                {/* Tombol Detail */}
-                <button
-                  onClick={() => setSelectedProject(project)}
-                  className="mt-2 mb-6 self-start text-sm font-bold text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 flex items-center gap-1.5 transition-colors group/btn"
-                >
-                  Baca Selengkapnya
-                  <svg className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </button>
-
-                {/* Tombol Aksi (Hanya menampilkan Icon agar lebih rapi di Card) */}
-                <div className="flex items-center gap-3 mt-auto pt-4 border-t border-gray-100 dark:border-gray-700">
+                <div className="mt-6 flex items-center gap-2 border-t border-white/8 pt-5">
                   {project.github && (
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 text-gray-600 bg-gray-100 hover:text-white hover:bg-gray-800 dark:text-gray-300 dark:bg-gray-700 dark:hover:bg-gray-500 rounded-lg transition-colors"
-                      title="View GitHub"
-                    >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" /></svg>
+                    <a href={project.github} target="_blank" rel="noopener noreferrer" title="View on GitHub" className="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/[0.03] text-slate-300 transition hover:border-white/25 hover:bg-white/10 hover:text-white">
+                      <FaGithub className="text-lg" />
                     </a>
                   )}
                   {project.youtube && (
-                    <a
-                      href={project.youtube}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 text-red-600 bg-red-50 hover:text-white hover:bg-red-600 dark:text-red-400 dark:bg-red-900/30 dark:hover:bg-red-600 dark:hover:text-white rounded-lg transition-colors"
-                      title="View YouTube"
-                    >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a2.946 2.946 0 0 0-2.072-2.083C19.692 3.5 12 3.5 12 3.5s-7.692 0-9.426.603a2.946 2.946 0 0 0-2.072 2.083C0 8.012 0 12 0 12s0 3.988.502 5.814a2.946 2.946 0 0 0 2.072 2.083C4.308 20.5 12 20.5 12 20.5s7.692 0 9.426-.603a2.946 2.946 0 0 0 2.072-2.083C24 15.988 24 12 24 12s0-3.988-.502-5.814zM9.75 15.568V8.432L15.818 12 9.75 15.568z" /></svg>
+                    <a href={project.youtube} target="_blank" rel="noopener noreferrer" title="View on YouTube" className="grid h-10 w-10 place-items-center rounded-full border border-red-400/15 bg-red-500/[0.07] text-red-400 transition hover:border-red-400/40 hover:bg-red-500/15">
+                      <FaYoutube className="text-lg" />
                     </a>
                   )}
                   {project.linkedin && (
-                    <a
-                      href={project.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 text-blue-600 bg-blue-50 hover:text-white hover:bg-blue-600 dark:text-blue-400 dark:bg-blue-900/30 dark:hover:bg-blue-600 dark:hover:text-white rounded-lg transition-colors"
-                      title="View LinkedIn"
-                    >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 16 16"><path fillRule="evenodd" clipRule="evenodd" d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z" /></svg>
+                    <a href={project.linkedin} target="_blank" rel="noopener noreferrer" title="View on LinkedIn" className="grid h-10 w-10 place-items-center rounded-full border border-blue-400/15 bg-blue-500/[0.07] text-blue-400 transition hover:border-blue-400/40 hover:bg-blue-500/15">
+                      <FaLinkedin className="text-lg" />
                     </a>
                   )}
+                  <button type="button" onClick={() => setSelectedProject(project)} className="ml-auto text-xs font-bold uppercase tracking-wider text-blue-400 transition hover:text-blue-300">
+                    View details →
+                  </button>
                 </div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </div>
 
-      {/* Pop-up Modal untuk Detail Proyek */}
       {selectedProject && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/70 backdrop-blur-md transition-opacity"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#020617]/85 p-4 backdrop-blur-md"
           onClick={() => setSelectedProject(null)}
         >
           <div
-            className="bg-white dark:bg-gray-800 rounded-3xl w-full max-w-3xl max-h-[90vh] overflow-hidden shadow-2xl relative flex flex-col transform transition-transform scale-100"
-            onClick={(e) => e.stopPropagation()}
+            className="relative max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-3xl border border-blue-400/15 bg-[#0b111d]"
+            onClick={(event) => event.stopPropagation()}
           >
-            {/* Tombol Tutup (Silang) */}
             <button
               onClick={() => setSelectedProject(null)}
-              className="absolute top-4 right-4 z-10 p-2 bg-black/50 hover:bg-black/80 text-white rounded-full backdrop-blur-sm transition-colors"
+              className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-[#080c14]/80 text-xl text-white backdrop-blur"
+              aria-label="Close"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              ×
             </button>
-
-            {/* Banner Gambar */}
-            <div className="w-full h-48 sm:h-64 md:h-80 shrink-0">
-              <img
-                src={selectedProject.image}
-                alt={selectedProject.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            {/* Konten Scrollable */}
-            <div className="p-6 md:p-8 overflow-y-auto flex-grow custom-scrollbar">
-              <h3 className="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white mb-4">
+            <img src={selectedProject.image} alt={selectedProject.title} className="h-56 w-full object-cover sm:h-96" />
+            <div className="p-6 sm:p-9">
+              <h3 className="text-2xl font-bold text-white sm:text-4xl">
                 {selectedProject.title.replace(/^\d+\.\s*/, "")}
               </h3>
-
-              <div className="flex flex-wrap gap-2 mb-6">
-                {selectedProject.subtitle.split(",").map((tech, i) => (
-                  <span
-                    key={i}
-                    className="px-3 py-1.5 text-xs font-bold text-blue-700 bg-blue-50 dark:text-blue-300 dark:bg-blue-900/40 rounded-full"
-                  >
-                    {tech.trim().replace(/^&\s*/, "")}
-                  </span>
-                ))}
-              </div>
-
-              <div className="border-t border-gray-100 dark:border-gray-700 pt-6 mb-8">
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-justify md:text-left">
-                  {selectedProject.detail}
-                </p>
-              </div>
-
-              {/* Tombol Aksi Lengkap di Modal */}
-              <div className="flex flex-wrap gap-4 mt-auto">
-                {selectedProject.github && (
-                  <a
-                    href={selectedProject.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold text-white bg-gray-900 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-xl transition-all"
-                  >
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" /></svg>
-                    GitHub
-                  </a>
-                )}
-                {selectedProject.youtube && (
-                  <a
-                    href={selectedProject.youtube}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-all"
-                  >
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a2.946 2.946 0 0 0-2.072-2.083C19.692 3.5 12 3.5 12 3.5s-7.692 0-9.426.603a2.946 2.946 0 0 0-2.072 2.083C0 8.012 0 12 0 12s0 3.988.502 5.814a2.946 2.946 0 0 0 2.072 2.083C4.308 20.5 12 20.5 12 20.5s7.692 0 9.426-.603a2.946 2.946 0 0 0 2.072-2.083C24 15.988 24 12 24 12s0-3.988-.502-5.814zM9.75 15.568V8.432L15.818 12 9.75 15.568z" /></svg>
-                    YouTube
-                  </a>
-                )}
-                {selectedProject.linkedin && (
-                  <a
-                    href={selectedProject.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all"
-                  >
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 16 16"><path fillRule="evenodd" clipRule="evenodd" d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z" /></svg>
-                    LinkedIn
-                  </a>
-                )}
-              </div>
+              <p className="mt-3 text-sm font-medium text-blue-400">{selectedProject.subtitle}</p>
+              <p className="mt-7 border-t border-white/8 pt-7 leading-8 text-slate-300">
+                {selectedProject.detail}
+              </p>
             </div>
           </div>
         </div>

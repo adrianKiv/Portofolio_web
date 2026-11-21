@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function Experience() {
   const [experiences, setExperiences] = useState([]);
@@ -13,20 +13,16 @@ export default function Experience() {
   useEffect(() => {
     const controller = new AbortController();
 
-    fetch("https://go-porto-api.vercel.app/api/experiences", {
-      signal: controller.signal,
-    })
-      .then((response) => {
+    Promise.all([
+      fetch("https://go-porto-api.vercel.app/api/experiences", { signal: controller.signal }).then((response) => {
         if (!response.ok) throw new Error("Gagal mengambil data pengalaman");
         return response.json();
-      })
-      .then((result) => {
-        setExperiences(Array.isArray(result.data) ? result.data : []);
-      })
+      }),
+      new Promise((resolve) => window.setTimeout(resolve, 900)),
+    ])
+      .then(([result]) => setExperiences(Array.isArray(result.data) ? result.data : []))
       .catch((fetchError) => {
-        if (fetchError.name !== "AbortError") {
-          setError(fetchError.message);
-        }
+        if (fetchError.name !== "AbortError") setError(fetchError.message);
       })
       .finally(() => setLoading(false));
 
@@ -34,220 +30,138 @@ export default function Experience() {
   }, []);
 
   useEffect(() => {
+    document.body.style.overflow = selectedExperience ? "hidden" : "auto";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [selectedExperience]);
+
+  useEffect(() => {
     const handleScroll = () => {
       if (!timelineRef.current) return;
-
       const rect = timelineRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
+      const trigger = window.innerHeight * 0.5;
+      const distance = trigger - rect.top;
+      setScrollProgress(
+        Math.max(0, Math.min(100, (distance / rect.height) * 100)),
+      );
 
-      // Titik pemicu ada persis di tengah layar
-      const offset = windowHeight / 2;
-
-      let distance = offset - rect.top;
-      const totalHeight = rect.height;
-
-      const drawDistance = Math.max(0, Math.min(totalHeight, distance));
-
-      setScrollProgress((drawDistance / totalHeight) * 100);
-
-      const newActiveNodes = [];
+      const active = [];
       nodesRef.current.forEach((node, index) => {
         if (node) {
           const nodeRect = node.getBoundingClientRect();
-          const dotCenter = nodeRect.top + nodeRect.height / 2;
-
-          if (offset >= dotCenter) {
-            newActiveNodes.push(index);
-          }
+          if (trigger >= nodeRect.top + nodeRect.height / 2) active.push(index);
         }
       });
-
-      setActiveNodes(newActiveNodes);
+      setActiveNodes(active);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    const timeoutId = setTimeout(handleScroll, 50);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      clearTimeout(timeoutId);
-    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [experiences]);
 
   return (
-    <section
-      id="experiences"
-      className="py-20 bg-white dark:bg-gray-900 relative overflow-hidden"
-    >
-      <div className="container mx-auto px-4 md:px-6 max-w-6xl">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-700 mb-4">
+    <section id="experiences" className="site-section py-24">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="mb-12">
+          <span className="section-kicker">02 / Journey</span>
+          <h2 className="mt-5 text-4xl font-black tracking-tight text-white sm:text-6xl">
             Experience
           </h2>
         </div>
 
-        <div className="relative" ref={timelineRef}>
-          {/* Garis Latar Belakang (Vertikal) */}
-          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-1 bg-blue-200 dark:bg-gray-700 transform -translate-x-1/2 rounded-full z-0"></div>
-
-          {/* Garis Indikator Scroll Aktif (Vertikal) dengan efek glow */}
-          <div
-            className="absolute left-6 md:left-1/2 top-0 w-1 bg-blue-500 dark:bg-blue-400 transform -translate-x-1/2 rounded-full z-0 transition-all duration-75 ease-out shadow-[0_0_8px_#3b82f6]"
-            style={{ height: `${scrollProgress}%` }}
-          ></div>
-
-          {loading && (
-            <p className="text-center text-gray-500 dark:text-gray-400 pl-16 md:pl-0">
-              Memuat pengalaman...
-            </p>
-          )}
-          {error && (
-            <p className="text-center text-red-500 pl-16 md:pl-0">
-              {error}
-            </p>
-          )}
-          <div className="space-y-12">
-            {experiences.map((exp, index) => {
-              const isLeft = index % 2 === 0;
-              const isActiveNode = activeNodes.includes(index);
-
-              return (
-                <div
-                  key={exp.ID ?? index}
-                  className={`relative flex flex-col md:flex-row items-center justify-between w-full ${
-                    isLeft ? "md:flex-row-reverse" : ""
-                  }`}
-                >
-                  {/* Titik/Node Roadmap */}
-                  <div
-                    ref={(el) => (nodesRef.current[index] = el)}
-                    className={`absolute top-1/2 left-6 md:left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full border-[6px] shadow-sm flex items-center justify-center z-10 group hover:scale-110 transition-all duration-300 ${
-                      isActiveNode
-                        ? "bg-white dark:bg-gray-800 border-blue-500 dark:border-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.5)]"
-                        : "bg-white dark:bg-gray-800 border-blue-100 dark:border-gray-700"
-                    }`}
-                  >
-                    <div
-                      className={`w-3.5 h-3.5 rounded-full transition-colors duration-300 ${
-                        isActiveNode
-                          ? "bg-blue-500 dark:bg-blue-400"
-                          : "bg-blue-200 dark:bg-gray-600"
-                      }`}
-                    ></div>
-
-                    {/* Garis Penghubung Horizontal (Animasi menembak ke arah kotak) */}
-                    <div
-                      className={`absolute top-1/2 transform -translate-y-1/2 h-1 -z-10 transition-all duration-500 ease-out ${
-                        isActiveNode
-                          ? "w-10 bg-blue-500 shadow-[0_0_8px_#3b82f6]"
-                          : "w-0 bg-transparent"
-                      } ${
-                        isLeft
-                          ? "left-1/2 md:left-auto md:right-1/2" // Di mobile tembak ke kanan, di desktop tembak ke kiri
-                          : "left-1/2" // Selalu tembak ke kanan
-                      }`}
-                    ></div>
+        {loading && (
+          <div className="api-loading-wrap" role="status" aria-live="polite">
+            <div className="api-loading">
+              <span className="api-loading-spinner" aria-hidden="true" />
+              <div>
+                <p>Sedang mengambil data dari GO API</p>
+                <span>Menyiapkan pengalaman</span>
+              </div>
+            </div>
+            <div className="experience-skeleton">
+              {[0, 1, 2, 3].map((item) => (
+                <div key={item} className="experience-skeleton-row">
+                  <span />
+                  <div>
+                    <i />
+                    <b />
                   </div>
-
-                  {/* Spacer Desktop */}
-                  <div className="hidden md:block md:w-[calc(50%-2.5rem)]"></div>
-
-                  {/* Kartu Konten Wrapper */}
-                  <div
-                    className={`w-full pl-16 md:pl-0 md:w-[calc(50%-2.5rem)] transition-all duration-700 transform ${
-                      isActiveNode
-                        ? "opacity-100 translate-y-0"
-                        : "opacity-60 translate-y-8"
-                    }`}
-                  >
-                    {/* Wadah Animasi Bingkai Menyala Solid (Aktif Terus) */}
-                    <div
-                      className={`relative rounded-2xl p-[2px] z-20 transition-all duration-700 ease-in-out ${
-                        isActiveNode
-                          ? "bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.6)] delay-[400ms]" // Menyala setelah garis sampai (delay 400ms)
-                          : "bg-gray-200 dark:bg-gray-700 shadow-sm delay-0" // Mati seketika saat keluar layar
-                      }`}
-                    >
-                      {/* Box Background Bagian Dalam */}
-                      <div className="bg-white dark:bg-gray-800 p-6 rounded-[14px] relative z-10 flex flex-col h-full">
-                        <div className="mb-4">
-                          <span className="inline-block px-4 py-1.5 text-xs font-bold text-blue-700 bg-blue-50 dark:text-blue-300 dark:bg-blue-900/40 rounded-full">
-                            {exp.date}
-                          </span>
-                        </div>
-
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-white leading-tight">
-                          {exp.title}
-                        </h3>
-                        <p className="text-sm font-medium text-blue-500 dark:text-blue-400 mb-4 mt-1">
-                          @{exp.subtitle}
-                        </p>
-
-                        <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed line-clamp-3 mb-6 flex-1">
-                          {exp.detail}
-                        </p>
-
-                        <button
-                          onClick={() => setSelectedExperience(exp)}
-                          className="mt-auto self-start text-sm font-bold text-blue-500 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-2 transition-colors group/btn"
-                        >
-                          Baca Selengkapnya
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                  <i />
+                  <b />
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
+        )}
+        {error && <p className="text-sm text-red-400">{error}</p>}
+
+        <div className="experience-stack relative" ref={timelineRef}>
+          <div className="experience-top-line" aria-hidden="true">
+            <div
+              className="experience-top-progress"
+              style={{ width: `${scrollProgress}%` }}
+            />
+          </div>
+          {experiences.map((exp, index) => (
+            (() => {
+              const isActive = activeNodes.includes(index);
+              return (
+            <button
+              key={exp.ID ?? index}
+              ref={(el) => (nodesRef.current[index] = el)}
+              type="button"
+              onClick={() => setSelectedExperience(exp)}
+              className={`experience-row group relative grid w-full gap-4 overflow-hidden border-b border-white/[0.07] py-8 text-left transition-all duration-700 md:grid-cols-[70px_minmax(280px,1fr)_minmax(180px,.55fr)_44px] md:items-center ${
+                isActive
+                  ? "is-active border-blue-400/35"
+                  : ""
+              }`}
+            >
+              <span className="ml-3 experience-number">0{index + 1}</span>
+              <div>
+                <h3 className="experience-title text-xl font-bold text-white transition sm:text-2xl">
+                  {exp.title}
+                </h3>
+                <p className="mt-1 text-sm text-slate-500">{exp.subtitle}</p>
+              </div>
+              <p className="text-sm font-medium text-slate-400">{exp.date}</p>
+              <span className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-lg text-slate-400 transition group-hover:border-blue-400/40 group-hover:bg-blue-500/10 group-hover:text-blue-300">
+                ↗
+              </span>
+            </button>
+              );
+            })()
+          ))}
         </div>
       </div>
 
-      {/* Pop-up Modal */}
       {selectedExperience && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#020617]/85 p-4 backdrop-blur-md"
           onClick={() => setSelectedExperience(null)}
         >
           <div
-            className="bg-white dark:bg-gray-800 p-8 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
+            className="relative max-h-[88vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-blue-400/15 bg-[#0b111d] p-7 shadow-[0_30px_100px_rgba(0,0,0,.55)] sm:p-10"
+            onClick={(event) => event.stopPropagation()}
           >
             <button
               onClick={() => setSelectedExperience(null)}
-              className="absolute top-6 right-6 text-gray-400 hover:text-gray-800 dark:hover:text-white transition-colors"
+              className="absolute right-5 top-5 grid h-9 w-9 place-items-center rounded-full border border-white/10 text-slate-400 hover:text-white"
+              aria-label="Close"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              ×
             </button>
-
-            <div className="mb-6">
-              <span className="inline-block px-4 py-1.5 text-xs font-bold text-blue-700 bg-blue-50 dark:text-blue-300 dark:bg-blue-900/40 rounded-full mb-3">
-                {selectedExperience.date}
-              </span>
-              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                {selectedExperience.title}
-              </h3>
-              <p className="text-md font-medium text-blue-500 dark:text-blue-400 mt-2">
-                @{selectedExperience.subtitle}
-              </p>
-            </div>
-
-            <div className="border-t border-gray-100 dark:border-gray-700 pt-6">
-              <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-justify">
-                {selectedExperience.detail}
-              </p>
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-400">
+              {selectedExperience.date}
+            </span>
+            <h3 className="mt-5 pr-10 text-2xl font-bold text-white sm:text-3xl">
+              {selectedExperience.title}
+            </h3>
+            <p className="mt-2 text-sm font-medium text-blue-400">@{selectedExperience.subtitle}</p>
+            <div className="mt-7 border-t border-white/8 pt-7">
+              <p className="leading-8 text-slate-300">{selectedExperience.detail}</p>
             </div>
           </div>
         </div>

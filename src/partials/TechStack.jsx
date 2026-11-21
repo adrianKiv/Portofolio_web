@@ -99,57 +99,43 @@ export default function TechStack() {
   return (
     <section
       id="techstacks"
-      className="py-20 bg-gray-50 dark:bg-gray-900 overflow-hidden"
+      className="site-section border-y border-white/5 py-24"
     >
-      <div className="container mx-auto px-4 md:px-6 max-w-6xl">
-        {/* Header Section */}
-        <div className="text-center mb-16 max-w-2xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-700 mb-4">
-            Tech Stacks
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="mb-12">
+          <span className="section-kicker">05 / Toolkit</span>
+          <h2 className="mt-5 text-4xl font-black tracking-tight text-white sm:text-6xl">
+            Technology Stack
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 text-lg">
-            Technologies, languages, and tools I use to build scalable
-            applications.
+          <p className="mt-5 max-w-xl text-sm leading-7 text-slate-400">
+            Languages and tools used across frontend, backend, databases, testing, and deployment.
           </p>
         </div>
-
-        {/* Categories Map */}
-        <div className="space-y-16">
+        <div className="grid gap-px overflow-hidden rounded-3xl border border-white/8 bg-white/8 lg:grid-cols-3">
           {techCategories.map((category, catIndex) => (
-            <div key={catIndex} className="flex flex-col items-center">
-              {/* Category Title */}
-              <h3 className="text-sm md:text-base font-bold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 mb-8 text-center border-b border-gray-200 dark:border-gray-800 pb-2 w-full max-w-sm">
+            <div key={catIndex} className="bg-[#0b111d] p-6 sm:p-8">
+              <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-blue-300">
                 {category.title}
               </h3>
-
-              {/* Grid Tech Stack */}
-              <div className="flex flex-wrap justify-center gap-4 md:gap-6 max-w-4xl">
+              <div className="mt-7 grid grid-cols-3 gap-3">
                 {category.techs.map((item, itemIndex) => {
-                  const currentIndex = globalCardIndex++; // Simpan index unik
+                  const currentIndex = globalCardIndex++;
                   return (
                     <div
                       key={itemIndex}
                       ref={(el) => (cardsRef.current[currentIndex] = el)}
                       data-visible="false"
-                      className="group relative w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden shadow-sm flex flex-col items-center justify-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-xl bg-gray-200 dark:bg-gray-700"
+                      style={{ transitionDelay: `${(currentIndex % 8) * 55}ms` }}
+                      className="rotating-border reveal-up group flex min-h-24 flex-col items-center justify-center rounded-2xl p-3 transition duration-500 hover:-translate-y-1"
                     >
-                      {/* 1. Animasi Garis Berputar (Mati secara default, Menyala via atribut data-visible=true) */}
-                      <div className="absolute inset-[-50%] bg-[conic-gradient(from_0deg,transparent_0_270deg,#3b82f6_360deg)] animate-[spin_2s_linear_infinite] opacity-0 group-data-[visible=true]:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
-
-                      {/* 2. Inner Card Layer (Menutupi tengah animasi sehingga menyisakan border) */}
-                      <div className="absolute inset-[2px] bg-white dark:bg-gray-800 rounded-[14px] flex flex-col items-center justify-center z-10 transition-colors">
-                        {/* Ikon Gambar */}
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-10 h-10 md:w-12 md:h-12 object-contain grayscale opacity-30 group-data-[visible=true]:grayscale-0 group-data-[visible=true]:opacity-100 group-hover:scale-110 transition-all duration-500"
-                        />
-
-                        {/* Nama Teks */}
-                        <span className="mt-3 text-[10px] md:text-xs font-semibold text-gray-400 dark:text-gray-500 group-data-[visible=true]:text-blue-600 dark:group-data-[visible=true]:text-blue-400 transition-colors duration-500 text-center px-1">
-                          {item.name}
-                        </span>
-                      </div>
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="h-9 w-9 object-contain grayscale opacity-50 transition duration-500 group-hover:grayscale-0 group-hover:opacity-100"
+                      />
+                      <span className="mt-3 text-center text-[9px] font-semibold text-slate-500 transition group-hover:text-blue-300">
+                        {item.name}
+                      </span>
                     </div>
                   );
                 })}
