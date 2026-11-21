@@ -1,78 +1,46 @@
 import React, { useEffect, useRef, useState } from "react";
-import GBRmedihome from "../assets/images/medifastBeranda.png";
-import GBRUpdown from "../assets/images/Updown.png";
-import GBRHydroculus from "../assets/images/hydroculus.png";
-import GBRDBMS from "../assets/images/DBMS.png";
-import GBRHotel from "../assets/images/hoteljarkom.png";
-import GBRKeepreal from "../assets/images/keepreal.jpg";
-import GBRWEBGIS from "../assets/images/webgis2.png";
-
 export default function Project() {
-  const projects = [
-    {
-      title: "1. WebGIS Kuliner UPI",
-      subtitle: "Laravel, MVC, WebGIS, HTML, CSS, JavaCript, PHP, & MySQL",
-      detail:
-        "Developing a web-based application using Laravel, Leaflet.js, OpenStreetMap, and MySQL for mapping and recommending culinary MSMEs around UPI campus. The application has two types of users: the campus academic community (students, lecturers, and staff) and administrators who verify merchant submissions. The purpose of this application is to facilitate users in discovering personalized culinary options using Content-Based Filtering, navigating locations via real-time route tracking, and helping local micro-merchants increase digital promotional visibility through crowdsourced submissions.",
-      image: GBRWEBGIS,
-      github: "https://github.com/adrianKiv/web-umkm",
-      linkedin: "https://www.linkedin.com/in/adrianmulianto/details/projects/",
-      youtube: "",
-    },
-    {
-      title: "2. Up Down platformer game",
-      subtitle:
-        "Java, OOP (Object-Oriented Programming), MVVM (Model-view-viewmodel), & MySQL",
-      detail:
-        "A game with the main objective of surviving by jumping and staying on blocks or rooftops to get the score. Implementing OOP wsing MVVM for the concept of the program. Creating database for saving the progress of the player on the game",
-      image: GBRUpdown,
-      github: "https://github.com/adrianKiv/TMD_DPBO2024",
-      linkedin: "https://www.linkedin.com/in/adrianmulianto/details/projects/",
-      youtube: "https://youtu.be/elperHV679c",
-    },
-    {
-      title: "3. Medifast",
-      subtitle: "Flutter, Dart, FastAPI, Python & SQLite",
-      detail:
-        "Medifast is a mobile application designed for hospital needs. This mobile application presents various features that help in making appointments with doctors. Apart from that, a feature for printing digital prescriptions makes things easier for users without having to carry physical prescriptions.",
-      image: GBRmedihome,
-      github: "https://github.com/adrianKiv/medifast",
-      linkedin: "https://www.linkedin.com/in/adrianmulianto/details/projects/",
-      youtube: "",
-    },
-    {
-      title: "4. Pertanian & Peternakan DBMS",
-      subtitle: "C, & Sequential File",
-      detail:
-        "Creating DBMS that included process of Create, Read, Update, and Delete Data on C Language, also implementing Sequential File and Abstract Machine.",
-      image: GBRDBMS,
-      github: "https://github.com/adrianKiv/TMD_ALPRO2_2023",
-      linkedin: "https://www.linkedin.com/in/adrianmulianto/details/projects/",
-      youtube: "https://youtu.be/WdngsJ4nlP0",
-    },
-    {
-      title: "5. Hotel Network System",
-      subtitle: "Cisco Packet Tracer, Networking, & IOT",
-      detail: "Creating an Hotel Network System with IOT.",
-      image: GBRHotel,
-      github: "",
-      linkedin: "https://www.linkedin.com/in/adrianmulianto/details/projects/",
-      youtube: "",
-    },
-    {
-      title: "6. KeepReal",
-      subtitle: "HTML, CSS, JavaScript, PHP, & MongoDB",
-      detail: "Simple Online Shop Web using non-relational database MongoDB.",
-      image: GBRKeepreal,
-      github: "https://github.com/adrianKiv/BDNR-UTS",
-      linkedin: "https://www.linkedin.com/in/adrianmulianto/details/projects/",
-      youtube: "",
-    },
-  ];
-
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const cardsRef = useRef([]);
   // State untuk mengontrol pop-up modal detail proyek
   const [selectedProject, setSelectedProject] = useState(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetch("https://go-porto-api.vercel.app/api/featured-projects", {
+      signal: controller.signal,
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Gagal mengambil data proyek");
+        return response.json();
+      })
+      .then((result) => {
+        const data = Array.isArray(result.data) ? result.data : [];
+        setProjects(
+          data.map((item) => ({
+            id: item.ID,
+            title: item.title,
+            subtitle: item.subtitle,
+            detail: item.detail,
+            image: item.image_url,
+            github: item.github_url,
+            linkedin: item.linkedin_url,
+            youtube: item.youtube_url,
+          })),
+        );
+      })
+      .catch((fetchError) => {
+        if (fetchError.name !== "AbortError") {
+          setError(fetchError.message);
+        }
+      })
+      .finally(() => setLoading(false));
+
+    return () => controller.abort();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -97,12 +65,13 @@ export default function Project() {
       if (card) observer.observe(card);
     });
 
+    const cards = [...cardsRef.current];
     return () => {
-      cardsRef.current.forEach((card) => {
+      cards.forEach((card) => {
         if (card) observer.unobserve(card);
       });
     };
-  }, []);
+  }, [projects]);
 
   // Mencegah scroll pada body saat modal terbuka
   useEffect(() => {
@@ -150,11 +119,22 @@ export default function Project() {
           </p>
         </div>
 
+        {loading && (
+          <p className="text-center text-gray-500 dark:text-gray-300">
+            Memuat proyek...
+          </p>
+        )}
+        {error && (
+          <p className="text-center text-red-500">
+            {error}
+          </p>
+        )}
+
         {/* Grid Card Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
           {projects.map((project, index) => (
             <div
-              key={index}
+              key={project.id ?? index}
               ref={(el) => (cardsRef.current[index] = el)}
               className="opacity-0 translate-y-12 transition-all duration-700 ease-out bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transform hover:-translate-y-2 flex flex-col border border-gray-100 dark:border-gray-700 group"
             >

@@ -1,46 +1,43 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function Achievements() {
-  const records = [
-    {
-      type: "Achievement",
-      title: "Research Paper Publication",
-      issuer: "Pseudocode Journal",
-      date: "Sep 2026",
-      description:
-        "Published a research paper sinta 4 titled 'Design and Development of a WebGIS Directory and Promotional Platform for Culinary MSMEs Using Content-Based Filtering' in Volume 13 Nomor 2.",
-      link: "https://ejournal.unib.ac.id/pseudocode/article/view/51706",
-    },
-    {
-      type: "Certification",
-      title: "Microsoft Office Specialist: Word 2019 Associate",
-      issuer: "Microsoft",
-      date: "Oct 2025",
-      description:
-        "Demonstrated proficiency in Microsoft Word, validating essential skills in word processing and document management.",
-      link: "https://www.linkedin.com/in/adrianmulianto/overlay/Certifications/1373175941/treasury/?profileId=ACoAAD5WLhsBZdPjL-5FoR0gS-6TbQwU_puuzQI",
-    },
-    {
-      type: "Certification",
-      title: "Data Analysis (Summer Course)",
-      issuer: "Universitas Pendidikan Indonesia",
-      date: "Jun 2024",
-      description:
-        "Completed an intensive summer course focused on data analysis methodologies using the Python programming language.",
-      link: "https://www.linkedin.com/in/adrianmulianto/overlay/Certifications/879494033/treasury/?profileId=ACoAAD5WLhsBZdPjL-5FoR0gS-6TbQwU_puuzQI",
-    },
-    {
-      type: "Certification",
-      title: "Certified Developer",
-      issuer: "Alibaba Cloud",
-      date: "Dec 2023",
-      description:
-        "Earned certification demonstrating fundamental knowledge of cloud computing principles and database management using MySQL and SQL.",
-      link: "https://www.linkedin.com/in/adrianmulianto/overlay/Certifications/879115336/treasury/?profileId=ACoAAD5WLhsBZdPjL-5FoR0gS-6TbQwU_puuzQI",
-    },
-  ];
-
+  const [achiv, setAchiv] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const cardsRef = useRef([]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetch("https://go-porto-api.vercel.app/api/ac", {
+      signal: controller.signal,
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Gagal mengambil data pencapaian");
+        return response.json();
+      })
+      .then((result) => {
+        const data = Array.isArray(result.data) ? result.data : [];
+        setAchiv(
+          data.map((item) => ({
+            id: item.ID,
+            type: item.type,
+            title: item.title,
+            date: item.date,
+            description: item.description,
+            link: item.link_url,
+          })),
+        );
+      })
+      .catch((fetchError) => {
+        if (fetchError.name !== "AbortError") {
+          setError(fetchError.message);
+        }
+      })
+      .finally(() => setLoading(false));
+
+    return () => controller.abort();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -67,12 +64,13 @@ export default function Achievements() {
       if (card) observer.observe(card);
     });
 
+    const cards = [...cardsRef.current];
     return () => {
-      cardsRef.current.forEach((card) => {
+      cards.forEach((card) => {
         if (card) observer.unobserve(card);
       });
     };
-  }, []);
+  }, [achiv]);
 
   return (
     <section
@@ -92,10 +90,20 @@ export default function Achievements() {
         </div>
 
         {/* Grid Layout */}
+        {loading && (
+          <p className="text-center text-gray-500 dark:text-gray-400">
+            Memuat pencapaian...
+          </p>
+        )}
+        {error && (
+          <p className="text-center text-red-500">
+            {error}
+          </p>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {records.map((item, index) => (
+          {achiv.map((item, index) => (
             <div
-              key={index}
+              key={item.id ?? index}
               ref={(el) => (cardsRef.current[index] = el)}
               // Class animasi: transisi memakan waktu 700ms
               className="opacity-0 translate-y-12 transition-all duration-700 ease-out bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm hover:shadow-xl transform hover:-translate-y-2 border border-gray-100 dark:border-gray-700 flex flex-col group"
@@ -153,10 +161,6 @@ export default function Achievements() {
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 {item.title}
               </h3>
-              <p className="text-sm font-medium text-blue-500 dark:text-blue-400 mb-4">
-                {item.issuer}
-              </p>
-
               {/* Deskripsi */}
               <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed flex-grow mb-6">
                 {item.description}

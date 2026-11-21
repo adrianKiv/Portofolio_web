@@ -19,6 +19,7 @@ import GBRflutter from "../assets/images/flutter.svg";
 import GBRmongodb from "../assets/images/mongodb.svg";
 import GBRselenium from "../assets/images/selenium.svg";
 import GBRsqlite from "../assets/images/sqlite.svg";
+import GBRGO from "../assets/images/Go-logo_Aqua.png";
 import GBRvite from "/vite.svg";
 
 const techCategories = [
@@ -44,6 +45,7 @@ const techCategories = [
       { name: "Python", image: GBRphyton },
       { name: "C++", image: GBRcpp },
       { name: "C", image: GBRc },
+      { name: "Go", image: GBRGO },
     ],
   },
   {
