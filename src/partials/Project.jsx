@@ -1,12 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaGithub, FaLinkedin, FaYoutube } from "react-icons/fa";
+import { AnimatePresence, motion as Motion, useReducedMotion } from "motion/react";
+import {
+  TypingText,
+  TypingTextCursor,
+} from "@animate-ui/react/primitives/texts/typing";
 
 export default function Project() {
+  const reduceMotion = useReducedMotion();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedProject, setSelectedProject] = useState(null);
   const cardsRef = useRef([]);
+  const restoreScrollRef = useRef(true);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -41,9 +48,48 @@ export default function Project() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = selectedProject ? "hidden" : "auto";
+    if (!selectedProject) return undefined;
+    document.body.classList.add("modal-open");
+    window.dispatchEvent(new Event("portfolio:modal-open"));
+
+    const scrollY = window.scrollY;
+    const previous = {
+      position: document.body.style.position,
+      top: document.body.style.top,
+      width: document.body.style.width,
+      overflow: document.body.style.overflow,
+    };
+
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
+
+    const closeOnNavigation = () => {
+      restoreScrollRef.current = false;
+      setSelectedProject(null);
+    };
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setSelectedProject(null);
+    };
+    window.addEventListener("portfolio:close-modals", closeOnNavigation);
+    window.addEventListener("hashchange", closeOnNavigation);
+    window.addEventListener("keydown", closeOnEscape);
+
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.classList.remove("modal-open");
+      window.dispatchEvent(new Event("portfolio:modal-close"));
+      window.removeEventListener("portfolio:close-modals", closeOnNavigation);
+      window.removeEventListener("hashchange", closeOnNavigation);
+      window.removeEventListener("keydown", closeOnEscape);
+      document.body.style.position = previous.position;
+      document.body.style.top = previous.top;
+      document.body.style.width = previous.width;
+      document.body.style.overflow = previous.overflow;
+      if (restoreScrollRef.current) {
+        window.requestAnimationFrame(() => window.scrollTo(0, scrollY));
+      }
+      restoreScrollRef.current = true;
     };
   }, [selectedProject]);
 
@@ -97,10 +143,15 @@ export default function Project() {
 
         <div className="grid gap-5 md:grid-cols-2">
           {projects.map((project, index) => (
-            <article
+            <Motion.article
               key={project.id ?? index}
               ref={(el) => (cardsRef.current[index] = el)}
               data-visible="false"
+              initial={reduceMotion ? false : { opacity: 0, x: index % 2 === 0 ? -54 : 54, y: 24 }}
+              whileInView={{ opacity: 1, x: 0, y: 0 }}
+              viewport={{ once: false, amount: 0.12 }}
+              whileHover={reduceMotion ? undefined : { y: -6 }}
+              transition={{ duration: 0.72, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
               className={`reveal-${index % 2 === 0 ? "left" : "right"} group overflow-hidden rounded-3xl border border-white/8 bg-[#0b111d] transition duration-500 hover:-translate-y-1 hover:border-blue-400/25 ${index === 0 ? "md:col-span-2" : ""}`}
             >
               <button
@@ -152,40 +203,72 @@ export default function Project() {
                   </button>
                 </div>
               </div>
-            </article>
+            </Motion.article>
           ))}
         </div>
       </div>
 
+      <AnimatePresence>
       {selectedProject && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#020617]/85 p-4 backdrop-blur-md"
+        <Motion.div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#020617]/92 p-3 backdrop-blur-xl sm:p-6"
           onClick={() => setSelectedProject(null)}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
         >
-          <div
-            className="relative max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-3xl border border-blue-400/15 bg-[#0b111d]"
+          <Motion.div
+            className="detail-modal relative max-h-[92vh] w-full max-w-5xl overflow-hidden rounded-[28px] border border-blue-400/15 bg-[#0b111d] shadow-[0_30px_120px_rgba(0,0,0,.65)]"
             onClick={(event) => event.stopPropagation()}
+            initial={reduceMotion ? false : { opacity: 0, y: 36, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={reduceMotion ? undefined : { opacity: 0, y: 20, scale: 0.98 }}
+            transition={{ type: "spring", stiffness: 380, damping: 32 }}
           >
+            <div className="absolute inset-x-0 top-0 z-20 h-px bg-gradient-to-r from-transparent via-blue-400/70 to-transparent" />
             <button
               onClick={() => setSelectedProject(null)}
-              className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-[#080c14]/80 text-xl text-white backdrop-blur"
+              className="absolute right-4 top-4 z-30 grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-[#080c14]/85 text-xl text-slate-300 backdrop-blur transition hover:border-blue-400/40 hover:bg-blue-500/10 hover:text-white"
               aria-label="Close"
             >
               ×
             </button>
-            <img src={selectedProject.image} alt={selectedProject.title} className="h-56 w-full object-cover sm:h-96" />
-            <div className="p-6 sm:p-9">
-              <h3 className="text-2xl font-bold text-white sm:text-4xl">
-                {selectedProject.title.replace(/^\d+\.\s*/, "")}
-              </h3>
-              <p className="mt-3 text-sm font-medium text-blue-400">{selectedProject.subtitle}</p>
-              <p className="mt-7 border-t border-white/8 pt-7 leading-8 text-slate-300">
-                {selectedProject.detail}
-              </p>
+            <div className="max-h-[92vh] overflow-y-auto">
+              <div className="relative h-52 overflow-hidden sm:h-80">
+                <img src={selectedProject.image} alt={selectedProject.title} className="h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0b111d] via-[#0b111d]/20 to-transparent" />
+              </div>
+              <div className="px-6 pb-8 sm:px-9 sm:pb-10">
+                <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-400">
+                  Featured project
+                </span>
+                <h3 className="mt-3 text-3xl font-black leading-tight tracking-tight text-white sm:text-5xl">
+                  {selectedProject.title.replace(/^\d+\.\s*/, "")}
+                </h3>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {selectedProject.subtitle.split(",").map((tech) => (
+                    <span key={tech} className="rounded-full border border-blue-400/15 bg-blue-500/[0.06] px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-blue-300">
+                      {tech.trim().replace(/^&\s*/, "")}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-8 border-l border-blue-400/30 pl-5 sm:pl-7">
+                  <TypingText
+                    text={selectedProject.detail}
+                    duration={14}
+                    delay={180}
+                    inView
+                    className="text-[15px] leading-8 text-slate-300 sm:text-base sm:leading-9"
+                  >
+                    <TypingTextCursor className="text-blue-400" />
+                  </TypingText>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </Motion.div>
+        </Motion.div>
       )}
+      </AnimatePresence>
     </section>
   );
 }

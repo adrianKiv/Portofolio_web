@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
 import { FiArrowDownRight, FiDownload } from "react-icons/fi";
 import Fotowis from "../assets/images/fotowis.jpeg";
+import { motion as Motion, useReducedMotion } from "motion/react";
 
 const words = [
   "Software Engineer.",
@@ -11,6 +12,7 @@ const words = [
 ];
 
 function Header() {
+  const reduceMotion = useReducedMotion();
   const [text, setText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopNum, setLoopNum] = useState(0);
@@ -58,6 +60,10 @@ function Header() {
     { text: "Contact", href: "#contact" },
   ];
 
+  const handleNavigation = () => {
+    window.dispatchEvent(new Event("portfolio:close-modals"));
+  };
+
   return (
     <header id="about" className="relative min-h-[92vh] overflow-hidden bg-[#080c14] text-white">
       <div className="absolute inset-0 opacity-30" aria-hidden="true">
@@ -82,6 +88,7 @@ function Header() {
                 <a
                   key={index}
                   href={link.href}
+                  onClick={handleNavigation}
                   className="text-sm font-medium text-slate-400 transition hover:text-white"
                 >
                   {link.text}
@@ -90,6 +97,7 @@ function Header() {
             </div>
             <a
               href="#contact"
+              onClick={handleNavigation}
               className="hidden items-center gap-2 rounded-full border border-blue-400/30 bg-blue-500/10 px-4 py-2 text-xs font-bold text-blue-300 transition hover:border-blue-400/60 hover:bg-blue-500/20 sm:flex"
             >
               Let's talk <FiArrowDownRight />
@@ -109,8 +117,11 @@ function Header() {
               <a
                 key={index}
                 href={link.href}
+                onClick={() => {
+                  handleNavigation();
+                  setMobileMenuOpen(false);
+                }}
                 className="block border-b border-white/5 py-3 text-sm font-medium text-slate-300"
-                onClick={() => setMobileMenuOpen(false)}
               >
                 {link.text}
               </a>
@@ -120,7 +131,12 @@ function Header() {
       </nav>
       <div className="relative z-10 mx-auto flex min-h-[92vh] max-w-7xl items-center px-5 pb-12 pt-28 sm:px-8">
         <div className="grid w-full items-center gap-12 lg:grid-cols-[1.15fr_.85fr]">
-          <div className="hero-copy-in">
+          <Motion.div
+            className="hero-copy-in"
+            initial={reduceMotion ? false : { opacity: 0, x: -48 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.78, ease: [0.16, 1, 0.3, 1] }}
+          >
             <div className="section-kicker mb-7">Portfolio / 2026</div>
             <h1 className="max-w-4xl text-[clamp(3.2rem,8vw,7.2rem)] font-black leading-[0.88] tracking-[-0.055em] text-white">
               Adrian
@@ -144,10 +160,20 @@ function Header() {
                 <FiDownload /> Download CV
               </a>
             </div>
-          </div>
-          <div className="hero-image-in relative mx-auto w-full max-w-[430px]">
+          </Motion.div>
+          <Motion.div
+            className="hero-image-in relative mx-auto w-full max-w-[430px]"
+            initial={reduceMotion ? false : { opacity: 0, x: 64, scale: 0.96 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+          >
             <div className="absolute -inset-5 rounded-[2.5rem] border border-blue-400/10" />
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/10 bg-[#101827] blue-glow">
+            <div className="hero-profile-frame relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/10 bg-[#101827] blue-glow">
+              <span className="hero-orbit hero-orbit-one" aria-hidden="true" />
+              <span className="hero-orbit hero-orbit-two" aria-hidden="true" />
+              <span className="hero-node hero-node-one" aria-hidden="true" />
+              <span className="hero-node hero-node-two" aria-hidden="true" />
+              <span className="hero-node hero-node-three" aria-hidden="true" />
               <img src={Fotowis} alt="Adrian Mulianto" className="h-full w-full object-cover grayscale-[12%]" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#080c14] via-transparent to-blue-500/5" />
               <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
@@ -158,7 +184,7 @@ function Header() {
                 <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_16px_#34d399]" />
               </div>
             </div>
-          </div>
+          </Motion.div>
         </div>
       </div>
     </header>

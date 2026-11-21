@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { motion as Motion, useReducedMotion } from "motion/react";
 import GBRcss from "../assets/images/logos_css.svg";
 import GBRgit from "../assets/images/logos_git.svg";
 import GBRhtml from "../assets/images/logos_html.svg";
@@ -64,6 +65,7 @@ const techCategories = [
 
 export default function TechStack() {
   const cardsRef = useRef([]);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     // Observer untuk memantau visibilitas setiap box tech di layar
@@ -113,7 +115,14 @@ export default function TechStack() {
         </div>
         <div className="grid gap-px overflow-hidden rounded-3xl border border-white/8 bg-white/8 lg:grid-cols-3">
           {techCategories.map((category, catIndex) => (
-            <div key={catIndex} className="bg-[#0b111d] p-6 sm:p-8">
+            <Motion.div
+              key={catIndex}
+              className="bg-[#0b111d] p-6 sm:p-8"
+              initial={reduceMotion ? false : { opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{ duration: 0.62, delay: catIndex * 0.1, ease: [0.16, 1, 0.3, 1] }}
+            >
               <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-blue-300">
                 {category.title}
               </h3>
@@ -121,11 +130,14 @@ export default function TechStack() {
                 {category.techs.map((item, itemIndex) => {
                   const currentIndex = globalCardIndex++;
                   return (
-                    <div
+                    <Motion.div
                       key={itemIndex}
                       ref={(el) => (cardsRef.current[currentIndex] = el)}
                       data-visible="false"
                       style={{ transitionDelay: `${(currentIndex % 8) * 55}ms` }}
+                      whileHover={reduceMotion ? undefined : { y: -7, scale: 1.03 }}
+                      whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+                      transition={{ type: "spring", stiffness: 460, damping: 28 }}
                       className="rotating-border reveal-up group flex min-h-24 flex-col items-center justify-center rounded-2xl p-3 transition duration-500 hover:-translate-y-1"
                     >
                       <img
@@ -136,11 +148,11 @@ export default function TechStack() {
                       <span className="mt-3 text-center text-[9px] font-semibold text-slate-500 transition group-hover:text-blue-300">
                         {item.name}
                       </span>
-                    </div>
+                    </Motion.div>
                   );
                 })}
               </div>
-            </div>
+            </Motion.div>
           ))}
         </div>
       </div>

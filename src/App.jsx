@@ -120,15 +120,15 @@ function App() {
         ))}
       </aside>
       <About />
-      <div className="torn-divider torn-divider-a" aria-hidden="true" />
+      <div className="section-gap" aria-hidden="true" />
       <Experience />
-      <div className="torn-divider torn-divider-b" aria-hidden="true" />
+      <div className="section-gap" aria-hidden="true" />
       <Achievements />
-      <div className="torn-divider torn-divider-c" aria-hidden="true" />
+      <div className="section-gap" aria-hidden="true" />
       <Project />
-      <div className="torn-divider torn-divider-d" aria-hidden="true" />
+      <div className="section-gap" aria-hidden="true" />
       <TechStack />
-      <div className="torn-divider torn-divider-e" aria-hidden="true" />
+      <div className="section-gap" aria-hidden="true" />
       <Contact />
     </main>
   );

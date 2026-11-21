@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
+import { motion as Motion, useReducedMotion } from "motion/react";
 
 export default function Achievements() {
+  const reduceMotion = useReducedMotion();
   const [achiv, setAchiv] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -89,11 +91,16 @@ export default function Achievements() {
 
         <div className="grid gap-5 md:grid-cols-2">
           {achiv.map((item, index) => (
-            <article
+            <Motion.article
               key={item.id ?? index}
               ref={(el) => (cardsRef.current[index] = el)}
               data-visible="false"
               style={{ transitionDelay: `${index * 90}ms` }}
+              initial={reduceMotion ? false : { opacity: 0, y: 44, x: index % 2 === 0 ? -20 : 20 }}
+              whileInView={{ opacity: 1, y: 0, x: 0 }}
+              viewport={{ once: false, amount: 0.18 }}
+              whileHover={reduceMotion ? undefined : { y: -8 }}
+              transition={{ duration: 0.62, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
               className="group min-h-[300px] rounded-2xl border border-white/8 bg-[#0b111d] p-7 transition-all duration-700 data-[visible=false]:translate-y-12 data-[visible=false]:opacity-0 data-[visible=true]:translate-y-0 data-[visible=true]:opacity-100 sm:p-9"
             >
               <div className="flex items-start justify-between gap-4">
@@ -116,7 +123,7 @@ export default function Achievements() {
                   View credential →
                 </a>
               )}
-            </article>
+            </Motion.article>
           ))}
         </div>
       </div>
