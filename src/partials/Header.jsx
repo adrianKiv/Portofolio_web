@@ -13,6 +13,7 @@ const words = [
 
 function Header() {
   const reduceMotion = useReducedMotion();
+  const compactMotion = reduceMotion || (typeof window !== "undefined" && window.innerWidth < 768);
   const [text, setText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopNum, setLoopNum] = useState(0);
@@ -65,7 +66,7 @@ function Header() {
   };
 
   return (
-    <header id="about" className="relative min-h-[92vh] overflow-hidden bg-[#080c14] text-white">
+    <header id="about" className="relative min-h-[92vh] overflow-hidden overflow-x-clip bg-[#080c14] text-white">
       <div className="absolute inset-0 opacity-30" aria-hidden="true">
         <div className="absolute -left-32 top-24 h-96 w-96 rounded-full bg-blue-700/30 blur-[120px]" />
         <div className="absolute right-[-10rem] bottom-[-12rem] h-[32rem] w-[32rem] rounded-full bg-indigo-700/20 blur-[140px]" />
@@ -75,7 +76,7 @@ function Header() {
           scrolled ? "border-b border-white/5 bg-[#080c14]/90 backdrop-blur-xl" : "bg-transparent"
         }`}
       >
-        <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-8">
           <div className="flex h-20 items-center justify-between">
             <a href="#" className="group flex items-center gap-3">
               <span className="grid h-9 w-9 place-items-center rounded-full border border-blue-400/40 bg-blue-500/10 font-pressstart text-[10px] text-blue-300">
@@ -129,11 +130,11 @@ function Header() {
           </div>
         )}
       </nav>
-      <div className="relative z-10 mx-auto flex min-h-[92vh] max-w-7xl items-center px-5 pb-12 pt-28 sm:px-8">
-        <div className="grid w-full items-center gap-12 lg:grid-cols-[1.15fr_.85fr]">
+      <div className="relative z-10 mx-auto flex min-h-[92vh] max-w-7xl items-center px-4 pb-10 pt-24 sm:px-8 sm:pb-12 sm:pt-28">
+        <div className="grid w-full items-center gap-10 lg:grid-cols-[1.15fr_.85fr] lg:gap-12">
           <Motion.div
             className="hero-copy-in"
-            initial={reduceMotion ? false : { opacity: 0, x: -48 }}
+            initial={compactMotion ? { opacity: 0, y: 20 } : { opacity: 0, x: -48 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.78, ease: [0.16, 1, 0.3, 1] }}
           >
@@ -163,7 +164,7 @@ function Header() {
           </Motion.div>
           <Motion.div
             className="hero-image-in relative mx-auto w-full max-w-[430px]"
-            initial={reduceMotion ? false : { opacity: 0, x: 64, scale: 0.96 }}
+            initial={compactMotion ? false : { opacity: 0, y: 28, scale: 0.97 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
           >

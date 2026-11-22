@@ -50,9 +50,12 @@ function App() {
         const sectionCenter = rect.top + rect.height / 2;
         const offset = (sectionCenter - viewportCenter) / window.innerHeight;
         const cappedOffset = Math.max(-1, Math.min(1, offset));
+        const mobileOffset = window.matchMedia("(max-width: 767px)").matches
+          ? 0
+          : cappedOffset * (index % 2 === 0 ? -10 : 10);
         section.style.setProperty(
           "--section-parallax",
-          `${cappedOffset * (index % 2 === 0 ? -10 : 10)}px`,
+          `${mobileOffset}px`,
         );
       });
 

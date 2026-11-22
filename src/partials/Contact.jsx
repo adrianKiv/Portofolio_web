@@ -6,6 +6,7 @@ const EMAIL = "adrianmulianto@gmail.com";
 
 export default function Contact() {
   const reduceMotion = useReducedMotion();
+  const compactMotion = reduceMotion || (typeof window !== "undefined" && window.innerWidth < 768);
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef(null);
 
@@ -25,7 +26,7 @@ export default function Contact() {
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <Motion.div
           className="contact-panel relative overflow-hidden rounded-[2rem] border border-blue-400/15 bg-[#0b111d] px-6 py-14 sm:px-12 sm:py-16"
-          initial={reduceMotion ? false : { opacity: 0, y: 48, scale: 0.985 }}
+          initial={compactMotion ? false : { opacity: 0, y: 48, scale: 0.985 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: false, amount: 0.16 }}
           transition={{ duration: 0.72, ease: [0.16, 1, 0.3, 1] }}

@@ -8,6 +8,7 @@ import {
 
 export default function Project() {
   const reduceMotion = useReducedMotion();
+  const compactMotion = reduceMotion || (typeof window !== "undefined" && window.innerWidth < 768);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -147,7 +148,7 @@ export default function Project() {
               key={project.id ?? index}
               ref={(el) => (cardsRef.current[index] = el)}
               data-visible="false"
-              initial={reduceMotion ? false : { opacity: 0, x: index % 2 === 0 ? -54 : 54, y: 24 }}
+              initial={compactMotion ? { opacity: 0, y: 24 } : { opacity: 0, x: index % 2 === 0 ? -54 : 54, y: 24 }}
               whileInView={{ opacity: 1, x: 0, y: 0 }}
               viewport={{ once: false, amount: 0.12 }}
               whileHover={reduceMotion ? undefined : { y: -6 }}
@@ -220,7 +221,7 @@ export default function Project() {
           <Motion.div
             className="detail-modal relative max-h-[92vh] w-full max-w-5xl overflow-hidden rounded-[28px] border border-blue-400/15 bg-[#0b111d] shadow-[0_30px_120px_rgba(0,0,0,.65)]"
             onClick={(event) => event.stopPropagation()}
-            initial={reduceMotion ? false : { opacity: 0, y: 36, scale: 0.96 }}
+            initial={compactMotion ? false : { opacity: 0, y: 36, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduceMotion ? undefined : { opacity: 0, y: 20, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 380, damping: 32 }}

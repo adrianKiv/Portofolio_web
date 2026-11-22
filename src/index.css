@@ -183,6 +183,7 @@ html {
   scroll-behavior: smooth;
   background: #080c14;
   scroll-snap-type: none;
+  overflow-x: hidden;
 }
 
 body {
@@ -190,6 +191,21 @@ body {
   background: #080c14;
   color: #e2e8f0;
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+#root,
+.site-shell {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
 }
 
 header,
@@ -1146,6 +1162,255 @@ footer > .mx-auto {
   .hero-orbit,
   .hero-node {
     animation: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .section-gap {
+    height: 56px;
+  }
+
+  .site-section,
+  header {
+    width: 100%;
+  }
+
+  .site-section {
+    padding-top: 72px;
+    padding-bottom: 72px;
+  }
+
+  .site-section > .mx-auto,
+  header > .relative,
+  footer > .mx-auto {
+    transform: none !important;
+  }
+
+  .cinematic-orb-one {
+    right: -180px;
+  }
+
+  .cinematic-orb-two {
+    left: -150px;
+  }
+
+  .cinematic-ring {
+    opacity: 0.35;
+  }
+
+  .hero-profile-frame::after,
+  .hero-orbit {
+    opacity: 0.55;
+  }
+
+  .hero-profile-frame::after {
+    width: 52px;
+    height: 52px;
+    right: -16px;
+  }
+
+  .hero-node {
+    width: 6px;
+    height: 6px;
+  }
+
+  .hero-image-in {
+    width: min(86vw, 360px);
+  }
+
+  .hero-copy-in h1 {
+    max-width: 100%;
+    font-size: clamp(3rem, 17vw, 4.8rem);
+    line-height: 0.92;
+  }
+
+  .hero-copy-in .mt-7 {
+    margin-top: 1.25rem;
+  }
+
+  .hero-copy-in .mt-7 p {
+    overflow-wrap: anywhere;
+  }
+
+  .hero-copy-in .mt-9 {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .hero-copy-in .mt-9 a {
+    justify-content: center;
+  }
+
+  .about-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .experience-row {
+    grid-template-columns: 42px minmax(0, 1fr) 40px;
+    column-gap: 10px;
+    row-gap: 8px;
+    align-items: start;
+    padding: 20px 8px 20px 0;
+  }
+
+  .experience-row .experience-number {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    margin-left: 8px;
+  }
+
+  .experience-row > div {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+  }
+
+  .experience-row > p {
+    grid-column: 2;
+    grid-row: 2;
+    min-width: 0;
+  }
+
+  .experience-row > span:last-child {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .experience-title {
+    font-size: 17px;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+
+  .detail-modal {
+    max-height: 94vh;
+    border-radius: 20px;
+  }
+
+  .detail-modal [class*="px-6"] {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .achievement-skeleton-card,
+  .project-skeleton-card {
+    min-width: 0;
+  }
+
+  .api-loading {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .api-loading p {
+    line-height: 1.4;
+  }
+
+  .contact-panel {
+    border-radius: 20px;
+  }
+
+  .contact-panel h2 {
+    font-size: clamp(2.1rem, 10vw, 3.2rem);
+  }
+
+  .contact-panel [class*="mt-12"] {
+    align-items: center;
+  }
+
+  footer .flex {
+    text-align: left;
+  }
+
+  .reveal-left,
+  .reveal-right,
+  .reveal-up {
+    transform: translateY(28px);
+  }
+
+  .reveal-left[data-visible="true"],
+  .reveal-right[data-visible="true"],
+  .reveal-up[data-visible="true"] {
+    transform: translateY(0);
+  }
+
+  #projects .grid.gap-5,
+  #achievements .grid.gap-5 {
+    grid-template-columns: 1fr;
+  }
+
+  #projects article,
+  #achievements article {
+    min-width: 0;
+  }
+
+  #projects article [class*="h-72"],
+  #projects article [class*="h-[440px]"] {
+    height: 220px;
+  }
+
+  #projects article [class*="p-6"] {
+    padding: 1.25rem;
+  }
+
+  #projects article [class*="flex-wrap"] {
+    max-width: 100%;
+  }
+
+  #projects article [class*="line-clamp-2"] {
+    overflow-wrap: anywhere;
+  }
+
+  #techstacks .grid.gap-px {
+    grid-template-columns: 1fr;
+  }
+
+  #techstacks [class*="grid-cols-3"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #techstacks [class*="min-h-24"] {
+    min-height: 92px;
+  }
+
+  nav .mx-auto {
+    max-width: 100%;
+  }
+
+  nav [aria-label="Toggle navigation"] {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-copy-in h1 {
+    font-size: clamp(2.65rem, 16.5vw, 4rem);
+  }
+
+  .hero-copy-in {
+    margin-top: 0;
+  }
+
+  .hero-image-in {
+    width: min(82vw, 320px);
+  }
+
+  .hero-profile-frame {
+    border-radius: 1.5rem;
+  }
+
+  .experience-row {
+    grid-template-columns: 36px minmax(0, 1fr) 36px;
+  }
+
+  .experience-row > span:last-child {
+    width: 34px;
+    height: 34px;
+  }
+
+  .detail-modal {
+    max-height: 96vh;
   }
 }
 

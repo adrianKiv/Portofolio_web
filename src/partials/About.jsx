@@ -7,6 +7,7 @@ import {
 
 export default function About() {
   const reduceMotion = useReducedMotion();
+  const compactMotion = reduceMotion || (typeof window !== "undefined" && window.innerWidth < 768);
 
   return (
     <section
@@ -14,7 +15,7 @@ export default function About() {
     >
       <div className="relative mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-[.7fr_1.3fr] lg:gap-20">
         <Motion.div
-          initial={reduceMotion ? false : { opacity: 0, x: -56 }}
+          initial={compactMotion ? { opacity: 0, y: 20 } : { opacity: 0, x: -56 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: false, amount: 0.25 }}
           transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
@@ -22,7 +23,7 @@ export default function About() {
           <span className="section-kicker">01 / Profile</span>
         </Motion.div>
         <Motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 36 }}
+          initial={compactMotion ? false : { opacity: 0, y: 36 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.18 }}
           transition={{ duration: 0.72, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
@@ -52,8 +53,8 @@ export default function About() {
                 <TypingTextCursor className="text-blue-400" />
               </TypingText>
             </div>
-          <div className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/8 bg-white/8 sm:grid-cols-3">
-            {[["UPI", "Computer Science"], ["Full-stack", "Web development"], ["Indonesia", "West Java"]].map(([value, label]) => (
+          <div className="about-stats mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/8 bg-white/8 sm:grid-cols-3">
+            {[["UPI", "Computer Science"], ["Full-stack", "Web developer"], ["Indonesia", "West Java"]].map(([value, label]) => (
               <div key={label} className="bg-[#0b111d] p-5">
                 <p className="text-lg font-bold text-white">{value}</p>
                 <p className="mt-1 text-xs text-slate-500">{label}</p>

@@ -66,6 +66,7 @@ const techCategories = [
 export default function TechStack() {
   const cardsRef = useRef([]);
   const reduceMotion = useReducedMotion();
+  const compactMotion = reduceMotion || (typeof window !== "undefined" && window.innerWidth < 768);
 
   useEffect(() => {
     // Observer untuk memantau visibilitas setiap box tech di layar
@@ -118,7 +119,7 @@ export default function TechStack() {
             <Motion.div
               key={catIndex}
               className="bg-[#0b111d] p-6 sm:p-8"
-              initial={reduceMotion ? false : { opacity: 0, y: 32 }}
+              initial={compactMotion ? false : { opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false, amount: 0.2 }}
               transition={{ duration: 0.62, delay: catIndex * 0.1, ease: [0.16, 1, 0.3, 1] }}

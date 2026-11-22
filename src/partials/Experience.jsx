@@ -7,6 +7,7 @@ import {
 
 export default function Experience() {
   const reduceMotion = useReducedMotion();
+  const compactMotion = reduceMotion || (typeof window !== "undefined" && window.innerWidth < 768);
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -159,7 +160,7 @@ export default function Experience() {
               ref={(el) => (nodesRef.current[index] = el)}
               type="button"
               onClick={() => setSelectedExperience(exp)}
-              initial={reduceMotion ? false : { opacity: 0, x: index % 2 === 0 ? -32 : 32 }}
+              initial={compactMotion ? { opacity: 0, y: 20 } : { opacity: 0, x: index % 2 === 0 ? -32 : 32 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false, amount: 0.25 }}
               whileHover={reduceMotion ? undefined : { x: 5 }}
@@ -201,7 +202,7 @@ export default function Experience() {
           <Motion.div
             className="detail-modal relative max-h-[92vh] w-full max-w-3xl overflow-hidden rounded-[28px] border border-blue-400/15 bg-[#0b111d] shadow-[0_30px_120px_rgba(0,0,0,.65)]"
             onClick={(event) => event.stopPropagation()}
-            initial={reduceMotion ? false : { opacity: 0, y: 30, scale: 0.96 }}
+            initial={compactMotion ? false : { opacity: 0, y: 30, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduceMotion ? undefined : { opacity: 0, y: 18, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 420, damping: 34 }}

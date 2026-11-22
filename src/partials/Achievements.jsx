@@ -3,6 +3,7 @@ import { motion as Motion, useReducedMotion } from "motion/react";
 
 export default function Achievements() {
   const reduceMotion = useReducedMotion();
+  const compactMotion = reduceMotion || (typeof window !== "undefined" && window.innerWidth < 768);
   const [achiv, setAchiv] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -96,7 +97,7 @@ export default function Achievements() {
               ref={(el) => (cardsRef.current[index] = el)}
               data-visible="false"
               style={{ transitionDelay: `${index * 90}ms` }}
-              initial={reduceMotion ? false : { opacity: 0, y: 44, x: index % 2 === 0 ? -20 : 20 }}
+              initial={compactMotion ? false : { opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0, x: 0 }}
               viewport={{ once: false, amount: 0.18 }}
               whileHover={reduceMotion ? undefined : { y: -8 }}
