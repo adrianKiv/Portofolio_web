@@ -138,7 +138,7 @@ function Header() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.78, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="section-kicker mb-7">Portfolio / 2026</div>
+            <div className="section-kicker mb-7">Portofolio / 2026</div>
             <h1 className="max-w-4xl text-[clamp(3.2rem,8vw,7.2rem)] font-black leading-[0.88] tracking-[-0.055em] text-white">
               Adrian
               <span className="block text-blue-500">Mulianto.</span>
