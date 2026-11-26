@@ -5,6 +5,9 @@ import {
   TypingText,
   TypingTextCursor,
 } from "@animate-ui/react/primitives/texts/typing";
+import Pagination from "./Pagination.jsx";
+
+const PAGE_LIMIT = 7;
 
 export default function Project() {
   const reduceMotion = useReducedMotion();
@@ -12,21 +15,45 @@ export default function Project() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalRows, setTotalRows] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const sectionRef = useRef(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const cardsRef = useRef([]);
   const restoreScrollRef = useRef(true);
 
+  const changePage = (nextPage) => {
+    if (nextPage === page) return;
+    sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setPage(nextPage);
+  };
+
   useEffect(() => {
     const controller = new AbortController();
 
-    Promise.all([
-      fetch("https://go-porto-api.vercel.app/api/featured-projects", { signal: controller.signal }).then((response) => {
+    setLoading(true);
+    setError("");
+    fetch(`https://go-porto-api.vercel.app/api/featured-projects?page=${page}&limit=${PAGE_LIMIT}`, {
+      signal: controller.signal,
+    })
+      .then((response) => {
         if (!response.ok) throw new Error("Gagal mengambil data proyek");
         return response.json();
-      }),
-      new Promise((resolve) => window.setTimeout(resolve, 900)),
-    ])
-      .then(([result]) => {
+      })
+      .then((result) => {
+        const rowCount = Number(result.meta?.totalrows ?? result.meta?.totalRows ?? 0);
+        const pageCount = Number(
+          result.meta?.totalpages ?? result.meta?.totalPages ?? Math.ceil(rowCount / PAGE_LIMIT),
+        );
+        if (pageCount > 0 && page > pageCount) {
+          setPage(pageCount);
+          return;
+        }
+        if (pageCount === 0 && page !== 1) {
+          setPage(1);
+          return;
+        }
         setProjects(
           (Array.isArray(result.data) ? result.data : []).map((item) => ({
             id: item.ID,
@@ -39,14 +66,18 @@ export default function Project() {
             youtube: item.youtube_url,
           })),
         );
+        setTotalRows(rowCount);
+        setTotalPages(pageCount);
       })
       .catch((fetchError) => {
         if (fetchError.name !== "AbortError") setError(fetchError.message);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
 
     return () => controller.abort();
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     if (!selectedProject) return undefined;
@@ -107,7 +138,7 @@ export default function Project() {
   }, [projects]);
 
   return (
-    <section id="projects" className="site-section py-24">
+    <section ref={sectionRef} id="projects" className="site-section py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
@@ -122,7 +153,7 @@ export default function Project() {
           </div>
         </div>
 
-        {loading && (
+        {loading && projects.length === 0 && (
           <div className="api-loading-wrap" role="status" aria-live="polite">
             <div className="api-loading">
               <span className="api-loading-spinner" aria-hidden="true" />
@@ -207,6 +238,14 @@ export default function Project() {
             </Motion.article>
           ))}
         </div>
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          totalRows={totalRows}
+          limit={PAGE_LIMIT}
+          loading={loading}
+          onPageChange={changePage}
+        />
       </div>
 
       <AnimatePresence>
